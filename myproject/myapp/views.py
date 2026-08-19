@@ -52,3 +52,28 @@ def std(request):
 
     content += "</table>"
     return HttpResponse(content)
+
+
+
+def std1(request):
+    stddd = [
+        {"Name": "Rakshit", "Cgpa": 7, "Course": "Cse"},
+        {"Name": "Rohit", "Cgpa": 8, "Course": "Cse"},
+        {"Name": "Raj", "Cgpa": 9, "Course": "Cse"}
+    ]
+
+    content = "<table><tr>"
+    # Dynamically create table headers from the keys
+    for key in stddd[0].keys():
+        content += f"<th>{key}</th>"
+    content += "</tr>"
+
+    # Nested loop to dynamically create rows and cells
+    for student in stddd:
+        content += "<tr>"
+        for val in student.values():
+            content += f"<td>{val}</td>"
+        content += "</tr>"
+
+    content += "</table>"
+    return HttpResponse(content)
