@@ -97,3 +97,50 @@ def std2(request):
 
     content += "</table>"
     return HttpResponse(content)
+
+
+def fooddie(request, food_value):
+    fooditems = {
+        "pizza": 250,
+        "burger": 120,
+        "ice cream": 80
+    }
+
+    food = food_value.lower().strip()
+
+    if food in fooditems:
+        return HttpResponse(f"<h2>Food: {food_value.title()}</h2><p>Price: Rs. {fooditems[food]}</p>")
+    else:
+        return HttpResponse(f"<h2>Food: {food_value.title()}</h2><p style='color: red;'>Not Available</p>")
+
+
+foooddie = fooddie
+
+def mart (request):
+    items = request.GET.get('i')
+    return HttpResponse(f"<h2>Items: {items}</h2>")
+
+
+def calculator (request):
+    v1=request.GET.get('v1')
+    v2=request.GET.get('v2')
+    try:
+        v1 =int(v1)
+        v2 =int(v2)
+    except (ValueError):
+        return HttpResponse("<h2>Error: Invalid input values</h2>")
+
+    opr = request.GET.get('opr')
+
+
+    if opr == 'add':
+        result = int(v1) + int(v2)
+    elif opr == 'sub':
+        result = int(v1) - int(v2)
+    elif opr == 'mul':
+        result = int(v1) * int(v2)
+    elif opr == 'div':
+        result = int(v1) / int(v2)
+
+
+    return HttpResponse(f"<h2>Result: {result}</h2>")

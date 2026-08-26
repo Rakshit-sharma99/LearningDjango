@@ -24,4 +24,7 @@ urlpatterns = [
     path('std/', views.std, name='std'),
     path('std1/', views.std1, name='std1'),
     path('std2/', views.std2, name='std2'),
+    path('food/<str:food_value>/', views.fooddie, name='fooddie'),
+    path('mart/', views.mart, name='mart'),
+    path('calculator/', views.calculator, name='calculator')
 ]
