@@ -35,4 +35,9 @@ urlpatterns = [
 
     # \d used for digits
     re_path(r'^customer/(?P<customer_id>\d+)/$', views.customer),
+
+    #specific number of digits
+
+        re_path(r'^dob/(?P<dob>\d{4}-\d{2}-\d{2})/$', views.dob),
 ]
+
