@@ -144,3 +144,10 @@ def calculator (request):
 
 
     return HttpResponse(f"<h2>Result: {result}</h2>")
+
+
+
+
+
+def customer(request, customer_id):
+    return HttpResponse(f"<h2>Customer Name: {customer_id}</h2>")
