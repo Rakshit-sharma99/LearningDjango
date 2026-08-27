@@ -150,4 +150,4 @@ def calculator (request):
 
 
 def customer(request, customer_id):
-    return HttpResponse(f"<h2>Customer Name: {customer_id}</h2>")
+    return HttpResponse(f"<h2>Customer id: {customer_id}</h2>")

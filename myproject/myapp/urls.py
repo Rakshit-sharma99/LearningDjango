@@ -28,8 +28,11 @@ urlpatterns = [
     path('mart/', views.mart, name='mart'),
     path('calculator/', views.calculator, name='calculator'),
 # regular expresssion  + used for 1 or more characters
-    re_path(r'^customer/(?P<customer_id>[a-zA-Z]+)/$', views.customer),
+    # re_path(r'^customer/(?P<customer_id>[a-zA-Z]+)/$', views.customer),
             
 
             # * used for 0 or more characters
+
+    # \d used for digits
+    re_path(r'^customer/(?P<customer_id>\d+)/$', views.customer),
 ]
