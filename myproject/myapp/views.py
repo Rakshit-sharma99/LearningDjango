@@ -29,7 +29,7 @@ def dv(request):
 # ==========================================
 
 def mytemplate(request):
-    return render(request, 'test.html')
+    return render(request, 'test.html', {'name': 'Rakshit'})
 
 
 # ==========================================
