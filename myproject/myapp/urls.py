@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     # Template route
     path('mytemplate/', views.mytemplate, name='mytemplate'),
-
+    path('fooddata/', views.fooddata, name='fooddata'),
     # Divide by zero route to test custom 500 error
     path('dv/', views.dv, name='dv'),
 
