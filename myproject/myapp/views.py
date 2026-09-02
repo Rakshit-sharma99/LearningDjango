@@ -1,5 +1,40 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
+
+# ==========================================
+# Custom Error Handlers (500 & 404)
+# ==========================================
+
+def custom_500(request):
+    return HttpResponse("<h1 style='color: red;'>500 - Internal Server Error</h1>", status=500)
+
+
+def custom_404(request, exception=None):
+    return HttpResponse("<h1>404 - Page Not Found</h1>", status=404)
+
+
+# ==========================================
+# Divide By Zero View (Triggers 500 Error)
+# ==========================================
+
+def dv(request):
+    # This will trigger a ZeroDivisionError (Server 500 Error)
+    result = 10 / 0
+    return HttpResponse(f"<h2>Result: {result}</h2>")
+
+
+# ==========================================
+# Templates View
+# ==========================================
+
+def mytemplate(request):
+    return render(request, 'test.html')
+
+
+# ==========================================
+# Application Views
+# ==========================================
 
 def studentdetails(request):
     studentinfo = [
@@ -24,7 +59,6 @@ def studentdetails(request):
 
     content += "</table>"
     return HttpResponse(content)
-
 
 
 def std(request):
@@ -54,7 +88,6 @@ def std(request):
     return HttpResponse(content)
 
 
-
 def std1(request):
     stddd = [
         {"Name": "Rakshit", "Cgpa": 7, "Course": "Cse"},
@@ -77,8 +110,6 @@ def std1(request):
 
     content += "</table>"
     return HttpResponse(content)
-
-
 
 
 def std2(request):
@@ -116,41 +147,46 @@ def fooddie(request, food_value):
 
 foooddie = fooddie
 
-def mart (request):
+
+def mart(request):
     items = request.GET.get('i')
     return HttpResponse(f"<h2>Items: {items}</h2>")
 
 
-def calculator (request):
-    v1=request.GET.get('v1')
-    v2=request.GET.get('v2')
+def calculator(request):
+    v1 = request.GET.get('v1')
+    v2 = request.GET.get('v2')
     try:
-        v1 =int(v1)
-        v2 =int(v2)
-    except (ValueError):
+        v1 = int(v1)
+        v2 = int(v2)
+    except (ValueError, TypeError):
         return HttpResponse("<h2>Error: Invalid input values</h2>")
 
     opr = request.GET.get('opr')
 
-
     if opr == 'add':
-        result = int(v1) + int(v2)
+        result = v1 + v2
     elif opr == 'sub':
-        result = int(v1) - int(v2)
+        result = v1 - v2
     elif opr == 'mul':
-        result = int(v1) * int(v2)
+        result = v1 * v2
     elif opr == 'div':
-        result = int(v1) / int(v2)
-
+        if v2 == 0:
+            return HttpResponse("<h2>Error: Cannot divide by zero in calculator</h2>")
+        result = v1 / v2
+    else:
+        result = "Invalid Operation"
 
     return HttpResponse(f"<h2>Result: {result}</h2>")
-
-
-
 
 
 def customer(request, customer_id):
     return HttpResponse(f"<h2>Customer id: {customer_id}</h2>")
 
+
 def dob(request, dob):
     return HttpResponse(f"<h2>Date of Birth: {dob}</h2>")
+
+
+def menu(request, category, subcat=""):
+    return HttpResponse(f"<h2>You have chosen category: {category} | You have chosen sub cat: {subcat}</h2>")
