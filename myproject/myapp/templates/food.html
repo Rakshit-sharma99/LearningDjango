@@ -6,9 +6,15 @@
     <title>Document</title>
 </head>
 <body>
+
     <table border="1">
         {%for item in menu%}
-        {% if item.price != 120%}
+        {% if item.price == 'Free'%}
+         <tr style="background-color: pink;">
+            <td>{{item.name}}</td>
+            <td>Rs. {{item.price}}</td>
+        </tr>
+        {% else %}
         <tr>
             <td>{{item.name}}</td>
             <td>Rs. {{item.price}}</td>
