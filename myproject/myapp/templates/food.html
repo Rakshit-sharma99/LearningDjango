@@ -8,10 +8,12 @@
 <body>
     <table border="1">
         {%for item in menu%}
+        {% if item.price != 120%}
         <tr>
             <td>{{item.name}}</td>
             <td>Rs. {{item.price}}</td>
         </tr>
+        {%endif%}
         {%endfor%}
     </table>
 </body>

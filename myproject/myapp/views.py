@@ -39,7 +39,7 @@ def fooddata(request):
     newmenu=[
         {'name':'Pizza','price':250},
         {'name':'Burger','price':120},
-        {'name':'Ice Cream','price':80}
+        {'name':'Ice Cream','price':'Free'}
     ]
     return render(request, 'food.html', {'menu': newmenu})
 
