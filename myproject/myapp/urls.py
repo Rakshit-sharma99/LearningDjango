@@ -10,6 +10,7 @@ re_path(r'^fooddata/(?P<item_name>[\w -]+)/$', views.fooddata, name='fooddata'),
 #    path('fooddata/<str:item_name>/', views.fooddata, name='fooddata'),
     # Divide by zero route to test custom 500 error
     path('dv/', views.dv, name='dv'),
+    path ('testimage/', views.testimage, name='testimage'),
 
     # Application routes
     path('studentdetails/', views.studentdetails, name='studentdetails'),
@@ -19,7 +20,6 @@ re_path(r'^fooddata/(?P<item_name>[\w -]+)/$', views.fooddata, name='fooddata'),
     path('food/<str:food_value>/', views.fooddie, name='fooddie'),
     path('mart/', views.mart, name='mart'),
     path('calculator/', views.calculator, name='calculator'),
-
     # Regular expression routes
     re_path(r'^customer/(?P<customer_id>\d+)/$', views.customer, name='customer'),
     re_path(r'^dob/(?P<dob>\d{4}-\d{2}-\d{2})/$', views.dob, name='dob'),

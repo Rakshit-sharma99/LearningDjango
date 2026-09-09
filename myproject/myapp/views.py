@@ -43,6 +43,8 @@ def fooddata(request,item_name):
     ]
     return render(request, 'foodie.html', {'menu': newmenu, 'item_name': item_name})
 
+def testimage(request):
+    return render(request, 'testimage.html')
 # ==========================================
 # Application Views
 # ==========================================
