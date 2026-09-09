@@ -35,18 +35,17 @@ def mytemplate(request):
 
 
 
-def fooddata(request):
+def fooddata(request,item_name):
     newmenu=[
         {'name':'Pizza','price':250},
-        {'name':'Burger','price':120},
+        {'name':'burger','price':120},
         {'name':'Ice Cream','price':'Free'}
     ]
-    return render(request, 'food.html', {'menu': newmenu})
+    return render(request, 'foodie.html', {'menu': newmenu, 'item_name': item_name})
 
 # ==========================================
 # Application Views
 # ==========================================
-
 def studentdetails(request):
     studentinfo = [
         ["Ram", 67],

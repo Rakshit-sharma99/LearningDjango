@@ -11,15 +11,11 @@
         {%for item in menu%}
         {% if item.price == 'Free'%}
          <tr style="background-color: pink;">
-            <td>{{item.name}}</td>
+             {%endif%}
+             <td>{{item.name}}</td>
+        
             <td>Rs. {{item.price}}</td>
         </tr>
-        {% else %}
-        <tr>
-            <td>{{item.name}}</td>
-            <td>Rs. {{item.price}}</td>
-        </tr>
-        {%endif%}
         {%endfor%}
     </table>
 </body>
