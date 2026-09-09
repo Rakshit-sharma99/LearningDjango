@@ -11,7 +11,8 @@ re_path(r'^fooddata/(?P<item_name>[\w -]+)/$', views.fooddata, name='fooddata'),
     # Divide by zero route to test custom 500 error
     path('dv/', views.dv, name='dv'),
     path ('testimage/', views.testimage, name='testimage'),
-
+    path ('events/', views.events, name='events'),
+    
     # Application routes
     path('studentdetails/', views.studentdetails, name='studentdetails'),
     path('std/', views.std, name='std'),

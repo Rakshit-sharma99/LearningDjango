@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% for item in events %}
+    {% load static %}
+    <img src="{% static item.image %}" alt="" width="120" height="150">
+    <p>{{item.name}}</p>
+    <p>{{item.date}}</p>
+
+    {%endfor%}
+</body>
+</html>

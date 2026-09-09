@@ -45,6 +45,18 @@ def fooddata(request,item_name):
 
 def testimage(request):
     return render(request, 'testimage.html')
+
+
+
+
+
+def events(request):
+    events_list = [
+        {'name': 'Event 1', 'date': '2027-01-15', 'image': '/img1.png'},
+        {'name': 'Event 2', 'date': '2027-02-20', 'image': '/img2.png'},
+        {'name': 'Event 3', 'date': '2027-03-10', 'image': '/img3.png'},
+    ]
+    return render(request, 'events.html', {'events': events_list})
 # ==========================================
 # Application Views
 # ==========================================
