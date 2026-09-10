@@ -61,6 +61,7 @@ def events(request):
 
 
 
+# Sabhi events ko booking page par list karne ke liye view
 def eventbooking(request):
     events_list = [
         {'name': 'Event 1', 'date': '2027-01-15', 'image': '/img1.png'},
@@ -68,6 +69,18 @@ def eventbooking(request):
         {'name': 'Event 3', 'date': '2027-03-10', 'image': '/img3.png'},
     ]
     return render(request, 'booking.html', {'events': events_list})
+
+
+
+# URL se aane wala event name (eventdetails) ke according details render karne ke liye view
+def eventbook(request, eventdetails):
+    events_list = [
+        {'name': 'Event 1', 'date': '2027-01-15', 'image': '/img1.png'},
+        {'name': 'Event 2', 'date': '2027-02-20', 'image': '/img2.png'},
+        {'name': 'Event 3', 'date': '2027-03-10', 'image': '/img3.png'},
+    ]
+    # 'events': saari list, aur 'eventdetails': URL se aayi value (jaise 'Event 1')
+    return render(request, 'eventdetails.html', {'events': events_list, 'eventdetails': eventdetails})
 # ==========================================
 # Application Views
 # ==========================================

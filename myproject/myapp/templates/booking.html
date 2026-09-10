@@ -8,10 +8,11 @@
 <body>
     {% for item in events %}
 
-    <a href="{}">{{item.name}}</a>
+    {# Fixed: {{eventdetails.item}} galat tha, yahan {% url 'eventbook' item.name %} use hoga redirect karne ke liye #}
+    <a href="{% url 'eventbook' item.name %}">{{ item.name }}</a>
     <br>
 
-    {%endfor%}
+    {%endfor%}  
 
 </body>
 </html>

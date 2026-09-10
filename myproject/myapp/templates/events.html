@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    {% for item in events %}
+    {% for item in eventdetails%}
     {% load static %}
     <img src="{% static item.image %}" alt="" width="120" height="150">
     <p>{{item.name}}</p>

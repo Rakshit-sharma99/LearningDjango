@@ -1,0 +1,20 @@
+{% load static %} {# Fixed: {% load static %} loop ke andar nahi balki file ke top pe hona chahiye #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details</title>
+</head>
+<body>
+    {# Fixed: 'eventdetails' string tha isliye loop 'events' list par chalega #}
+    {% for item in events %}
+        {# Fixed: 'eventbooking' variable context me nahi tha, URL parameter 'eventdetails' se compare hoga #}
+        {% if item.name == eventdetails %}
+            <img src="{% static item.image %}" alt="{{ item.name }}" width="120" height="150">
+            <p><strong>Name:</strong> {{ item.name }}</p>
+            <p><strong>Date:</strong> {{ item.date }}</p>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>
