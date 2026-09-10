@@ -12,7 +12,7 @@ re_path(r'^fooddata/(?P<item_name>[\w -]+)/$', views.fooddata, name='fooddata'),
     path('dv/', views.dv, name='dv'),
     path ('testimage/', views.testimage, name='testimage'),
     path ('events/', views.events, name='events'),
-    
+    path ('booking/', views.eventbooking, name= ' eventbooking'),
     # Application routes
     path('studentdetails/', views.studentdetails, name='studentdetails'),
     path('std/', views.std, name='std'),
