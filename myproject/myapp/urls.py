@@ -4,9 +4,8 @@ from . import views
 urlpatterns = [
     # Template route
     path('mytemplate/', views.mytemplate, name='mytemplate'),
-    path('fooddata/', views.fooddata, name='fooddata'),
     # re_path(r'^fooddata/(?P<fooddata>[\w -]+)/?:(?P<item_name>[\w -]*)/)?$', views.fooddata, name='fooddata'),
-re_path(r'^fooddata/(?P<item_name>[\w -]+)/$', views.fooddata, name='fooddata'),
+# re_path(r'^fooddata/(?P<item_name>[\w -]+)/$', views.fooddata, name='fooddata'),
 #    path('fooddata/<str:item_name>/', views.fooddata, name='fooddata'),
     # Divide by zero route to test custom 500 error
     path('dv/', views.dv, name='dv'),

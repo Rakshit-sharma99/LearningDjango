@@ -3,12 +3,23 @@
 About page
 {%block css%}
 p {
-    color: pink;
+    color: orange;
     font-size: 18px;
 }
 {% endblock %}
 
 {% block content %}
     <p>Welcome to the Food page!</p>
-
+    {% for item in menu%}
+    <table border="1" style="color: purple;">
+        <br>
+        <tr style ="color: green;"">
+         {% load static %}
+   <td> <img src="{% static item.image %}" alt="" width="30" height="40"><td>   
+            <td>Item Name: {{ item.name }}</td>
+            <td>Price: {{ item.price }}</td>
+            <td>Size: {{ item.size }}</td>
+        </tr>
+        </table>
+    {% endfor %}
 {% endblock %}

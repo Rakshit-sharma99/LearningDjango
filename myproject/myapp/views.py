@@ -35,13 +35,6 @@ def mytemplate(request):
 
 
 
-def fooddata(request,item_name):
-    newmenu=[
-        {'name':'Pizza','price':250},
-        {'name':'burger','price':120},
-        {'name':'Ice Cream','price':'Free'}
-    ]
-    return render(request, 'foodie.html', {'menu': newmenu, 'item_name': item_name})
 
 def testimage(request):
     return render(request, 'testimage.html')
@@ -70,6 +63,9 @@ def eventbooking(request):
     ]
     return render(request, 'booking.html', {'events': events_list})
 
+
+
+# def fooddata(request):
 
 
 # URL se aane wala event name (eventdetails) ke according details render karne ke liye view
@@ -234,8 +230,14 @@ def customer(request, customer_id):
 def temp(request):
     return render(request, 'header.html')
 
-def food(request):
-    return render(request, 'food.html')
+def food(request, food_value=None):
+    newmenu=[
+        {'name':'Pizza','price':250 , 'size':'Large','image': '/img2.png'},
+        {'name':'Burger','price':120, 'size':'Medium','image': '/img3.png'},
+        {'name':'Ice Cream','price':'Free', 'size':'Small','image': '/img1.png'}
+    ]
+    return render(request, 'food.html', {'menu': newmenu, 'food_value': food_value})
+
 
 def home(request):
     return render(request, 'home.html')
