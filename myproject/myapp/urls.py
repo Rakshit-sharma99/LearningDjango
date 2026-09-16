@@ -22,7 +22,11 @@ re_path(r'^fooddata/(?P<item_name>[\w -]+)/$', views.fooddata, name='fooddata'),
     path('std2/', views.std2, name='std2'),
     path('food/<str:food_value>/', views.fooddie, name='fooddie'),
     path('mart/', views.mart, name='mart'),
-    path('calculator/', views.calculator, name='calculator'),
+    path('calculator/', views.calculator, name='calculator'),\
+    path('temp/', views.temp, name='temp'),
+    path('food/', views.food, name='food'),
+    path('about/', views.about, name='about'),
+    path('home/', views.home, name='home'),
     # Regular expression routes
     re_path(r'^customer/(?P<customer_id>\d+)/$', views.customer, name='customer'),
     re_path(r'^dob/(?P<dob>\d{4}-\d{2}-\d{2})/$', views.dob, name='dob'),

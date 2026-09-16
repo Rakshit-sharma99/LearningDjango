@@ -231,6 +231,17 @@ def calculator(request):
 def customer(request, customer_id):
     return HttpResponse(f"<h2>Customer id: {customer_id}</h2>")
 
+def temp(request):
+    return render(request, 'header.html')
+
+def food(request):
+    return render(request, 'food.html')
+
+def home(request):
+    return render(request, 'home.html')
+
+def about(request):
+    return render(request, 'about.html')
 
 def dob(request, dob):
     return HttpResponse(f"<h2>Date of Birth: {dob}</h2>")
