@@ -1,25 +1,1512 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
-About page
-{%block css%}
-p {
-    color: orange;
-    font-size: 18px;
+{% load static %}
+
+{% block title %}Culinary Repertoire &amp; Tasting Flights • AURA{% endblock %}
+
+{% block css %}
+/* ==========================================================================
+   FOOD REPERTOIRE PAGE SPECIFIC STYLES
+   ========================================================================== */
+.food-hero {
+  padding: clamp(3rem, 5vw, 4.5rem) 0 2rem;
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.food-header-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (min-width: 900px) {
+  .food-header-grid {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+/* Interactive Filter & Search Bar */
+.filter-sticky-toolbar {
+  position: sticky;
+  top: 74px;
+  z-index: 100;
+  background: rgba(11, 12, 14, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all var(--transition-base);
+}
+
+.filter-toolbar-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.filter-top-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+@media (min-width: 860px) {
+  .filter-top-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Live Search Input */
+.menu-search-wrap {
+  position: relative;
+  min-width: 280px;
+  max-width: 420px;
+  width: 100%;
+}
+.menu-search-input {
+  width: 100%;
+  padding: 0.65rem 1rem 0.65rem 2.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  color: #FFF;
+  transition: all var(--transition-fast);
+}
+.menu-search-input:focus {
+  border-color: var(--accent-gold);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.15);
+}
+.search-icon-svg {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Category Navigation Tabs */
+.category-pills-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.category-pills-list::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-tab-btn {
+  padding: 0.5rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+.cat-tab-btn:hover {
+  color: #FFF;
+  border-color: var(--border-medium);
+  background: rgba(255, 255, 255, 0.06);
+}
+.cat-tab-btn.active {
+  color: #0B0C0E;
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  font-weight: 600;
+  box-shadow: 0 4px 14px var(--accent-gold-glow);
+}
+
+/* Secondary Dietary Filter Tags */
+.dietary-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.dietary-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+.dietary-chip:hover {
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+.dietary-chip.selected {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold-light);
+}
+
+/* Results Count Bar */
+.results-counter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 1.25rem 0 0.5rem;
+}
+
+/* Main Food Catalogue Grid */
+.food-catalogue-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+@media (min-width: 680px) {
+  .food-catalogue-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1080px) {
+  .food-catalogue-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Elevated Dish Card */
+.menu-card {
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-base);
+  position: relative;
+}
+.menu-card:hover {
+  border-color: var(--border-gold);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(212, 175, 55, 0.1);
+}
+
+.menu-card-media {
+  position: relative;
+  aspect-ratio: 16 / 11;
+  background: var(--bg-secondary);
+  overflow: hidden;
+}
+.menu-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s var(--transition-smooth);
+}
+.menu-card:hover .menu-card-media img {
+  transform: scale(1.08);
+}
+
+.card-category-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(11, 12, 14, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--accent-gold);
+  border: 1px solid var(--border-gold);
+  text-transform: uppercase;
+}
+
+.card-portion-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(11, 12, 14, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: #FFF;
+  border: 1px solid var(--border-medium);
+}
+
+.card-price-tag {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(11, 12, 14, 0.9);
+  backdrop-filter: blur(12px);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--accent-gold-light);
+  border: 1px solid var(--border-gold);
+}
+
+.menu-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.menu-card-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: #FFF;
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+}
+
+.menu-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  flex: 1;
+}
+
+/* Flavor Profile Radar Bar */
+.flavor-radar {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 1.25rem;
+}
+.flavor-radar-header {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.45rem;
+  display: flex;
+  justify-content: space-between;
+}
+.flavor-bars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.flavor-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+.flavor-name {
+  width: 45px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+}
+.flavor-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.flavor-fill {
+  height: 100%;
+  background: var(--accent-gold);
+  border-radius: 2px;
+}
+
+.menu-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1rem;
+}
+
+/* Interactive Floating Tasting Flight Bar */
+.floating-flight-bar {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(140%);
+  z-index: 1500;
+  background: rgba(18, 21, 27, 0.92);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-full);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 0.65rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: transform var(--transition-base);
+  max-width: 90vw;
+}
+.floating-flight-bar.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.flight-bar-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.flight-counter-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  color: #0B0C0E;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flight-text-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #FFF;
+}
+.flight-text-meta {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-gold);
+}
+
+/* Tasting Flight Drawer / Modal */
+.flight-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 7, 8, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 3100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+  display: flex;
+  justify-content: flex-end;
+}
+.flight-drawer-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.flight-drawer-panel {
+  width: 100%;
+  max-width: 520px;
+  height: 100%;
+  background: var(--bg-secondary);
+  border-left: 1px solid var(--border-gold);
+  box-shadow: -15px 0 50px rgba(0, 0, 0, 0.8);
+  padding: 2rem clamp(1.25rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform var(--transition-base);
+  overflow-y: auto;
+}
+.flight-drawer-backdrop.active .flight-drawer-panel {
+  transform: translateX(0);
+}
+
+.flight-items-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin: 1.5rem 0;
+  flex: 1;
+  overflow-y: auto;
+}
+.flight-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+}
+.flight-item-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #FFF;
+}
+.flight-item-price {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--accent-gold-light);
+}
+
+/* Horizontal Showcase: Fermentation & Cellar */
+.cellar-scroll-section {
+  padding: clamp(4rem, 6vw, 6rem) 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+.cellar-carousel {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 1.5rem 0 2rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+.cellar-card {
+  flex: 0 0 320px;
+  scroll-snap-align: start;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-base);
+}
+.cellar-card:hover {
+  border-color: var(--border-gold);
+  transform: translateY(-4px);
+}
+.cellar-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-gold);
+  margin-bottom: 0.75rem;
+}
+.cellar-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: #FFF;
+  margin-bottom: 0.5rem;
+}
+.cellar-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Tasting Menu Tiers Comparison */
+.tasting-tiers-section {
+  padding: clamp(4.5rem, 8vw, 7rem) 0;
+}
+.tasting-tiers-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+@media (min-width: 900px) {
+  .tasting-tiers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.tier-card {
+  border-radius: var(--radius-xl);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all var(--transition-base);
+}
+.tier-card.featured {
+  border-color: var(--border-gold);
+  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.09) 0%, rgba(18, 21, 27, 0.95) 75%);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7), 0 0 35px rgba(212, 175, 55, 0.12);
+}
+.tier-card:hover {
+  transform: translateY(-6px);
+}
+.tier-ribbon {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent-gold);
+  color: #0B0C0E;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.85rem;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.1em;
+}
+.tier-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: #FFF;
+  margin-bottom: 0.5rem;
+}
+.tier-price-row {
+  margin: 1.25rem 0;
+}
+.tier-price {
+  font-family: var(--font-mono);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--accent-gold-light);
+}
+.tier-price-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.tier-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex: 1;
+}
+.tier-feature-item {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.tier-feature-item svg {
+  color: var(--accent-gold);
+  flex-shrink: 0;
 }
 {% endblock %}
 
 {% block content %}
-    <p>Welcome to the Food page!</p>
-    {% for item in menu%}
-    <table border="1" style="color: purple;">
-        <br>
-        <tr style ="color: green;"">
-         {% load static %}
-   <td> <img src="{% static item.image %}" alt="" width="30" height="40"><td>   
-            <td>Item Name: {{ item.name }}</td>
-            <td>Price: {{ item.price }}</td>
-            <td>Size: {{ item.size }}</td>
-        </tr>
-        </table>
-    {% endfor %}
+<!-- ==========================================================================
+     FOOD REPERTOIRE HERO
+     ========================================================================== -->
+<section class="food-hero">
+  <div class="container">
+    <div class="food-header-grid reveal-on-scroll">
+      <div>
+        <div class="eyebrow">THE LIVING REPERTOIRE</div>
+        <h1 class="section-title">A Symphony of Hearth &amp; Harvest</h1>
+        <p class="section-subtitle">
+          Every plate is an unrepeatable narrative. Below you will find our signature creations, dynamic seasonal selections, and multi-course sensory progressions.
+        </p>
+      </div>
+      <div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <button type="button" class="btn btn-gold" onclick="openReservationModal()">
+            <span>Reserve Tasting Table</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     INTERACTIVE FILTER & SEARCH TOOLBAR (STICKY)
+     ========================================================================== -->
+<div class="filter-sticky-toolbar">
+  <div class="container">
+    <div class="filter-toolbar-inner">
+      
+      <div class="filter-top-row">
+        <!-- Live Search -->
+        <div class="menu-search-wrap">
+          <svg class="search-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input 
+            type="text" 
+            id="menuSearchInput" 
+            class="menu-search-input" 
+            placeholder="Search by ingredient, dish or profile (e.g. Truffle, Wagyu, Ferment)..."
+            oninput="handleSearchFilter()"
+          >
+        </div>
+
+        <!-- Dietary Chips -->
+        <div class="dietary-tags-row">
+          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); margin-right: 0.25rem;">PREFERENCES:</span>
+          <span class="dietary-chip" onclick="toggleDietaryFilter(this, 'gf')">✓ Gluten-Free</span>
+          <span class="dietary-chip" onclick="toggleDietaryFilter(this, 'veg')">✓ Vegetarian</span>
+          <span class="dietary-chip" onclick="toggleDietaryFilter(this, 'special')">★ Chef's Special</span>
+        </div>
+      </div>
+
+      <!-- Category Navigation Tabs -->
+      <div class="category-pills-list">
+        <button type="button" class="cat-tab-btn active" onclick="switchCategory(this, 'all')">All Offerings</button>
+        <button type="button" class="cat-tab-btn" onclick="switchCategory(this, 'signature')">Signatures &amp; Tasting</button>
+        <button type="button" class="cat-tab-btn" onclick="switchCategory(this, 'backend')">Atelier Selections</button>
+        <button type="button" class="cat-tab-btn" onclick="switchCategory(this, 'mains')">Hearth &amp; Mains</button>
+        <button type="button" class="cat-tab-btn" onclick="switchCategory(this, 'crudo')">Crudo &amp; Small Plates</button>
+        <button type="button" class="cat-tab-btn" onclick="switchCategory(this, 'desserts')">Botanical Sweets</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     MENU CATALOGUE CONTAINER
+     ========================================================================== -->
+<section style="padding: 2rem 0 clamp(4rem, 6vw, 6rem);">
+  <div class="container">
+    
+    <div class="results-counter-bar">
+      <span id="activeFilterLabel">Showing all culinary creations</span>
+      <span id="dishCountLabel">Loading dishes...</span>
+    </div>
+
+    <div class="food-catalogue-grid" id="foodCatalogueGrid">
+      
+      <!-- ==========================================
+           DYNAMIC BACKEND MENU ITEMS FROM DJANGO CONTEXT
+           ========================================== -->
+      {% for item in menu %}
+      <article 
+        class="menu-card reveal-on-scroll" 
+        data-category="backend"
+        data-tags="special {% if item.name == 'Ice Cream' %}veg{% endif %} {% if item.name == 'Burger' %}gf{% endif %}"
+        data-name="{{ item.name|lower }}"
+        data-desc="signature chef item {{ item.size|lower }} {{ item.price }}"
+      >
+        <div class="menu-card-media">
+          <!-- Graceful fallback image logic based on dish name -->
+          {% if item.name == 'Pizza' %}
+            <img 
+              src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80" 
+              alt="{{ item.name }} - Woodfired Black Truffle Pizza"
+              loading="lazy"
+            >
+          {% elif item.name == 'Burger' %}
+            <img 
+              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80" 
+              alt="{{ item.name }} - Dry Aged Wagyu Brioche Burger"
+              loading="lazy"
+            >
+          {% elif item.name == 'Ice Cream' %}
+            <img 
+              src="https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&w=800&q=80" 
+              alt="{{ item.name }} - Smoked Madagascar Vanilla Gelato"
+              loading="lazy"
+            >
+          {% else %}
+            <img 
+              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" 
+              alt="{{ item.name }}"
+              loading="lazy"
+            >
+          {% endif %}
+
+          <span class="card-category-badge">Chef's Selection</span>
+          <span class="card-portion-badge">Portion: {{ item.size }}</span>
+          
+          <span class="card-price-tag">
+            {% if item.price == 'Free' %}
+              Complimentary
+            {% else %}
+              ${{ item.price }}
+            {% endif %}
+          </span>
+        </div>
+
+        <div class="menu-card-body">
+          <h3 class="menu-card-title">
+            {% if item.name == 'Pizza' %}
+              Artisanal Truffle &amp; Morel Hearth Pizza
+            {% elif item.name == 'Burger' %}
+              Koji-Aged Wagyu Brioche Burger
+            {% elif item.name == 'Ice Cream' %}
+              Smoked Tahitian Vanilla &amp; Birch Honey
+            {% else %}
+              {{ item.name }}
+            {% endif %}
+          </h3>
+
+          <p class="menu-card-desc">
+            {% if item.name == 'Pizza' %}
+              Hand-stretched 72-hour fermented sourdough crust, aged fior di latte, foraged black winter truffles, and wild oregano oil.
+            {% elif item.name == 'Burger' %}
+              Woodfire grilled 60-day dry-aged wagyu patty, caramelized bone marrow relish, melted aged gruyère, and house brioche bun.
+            {% elif item.name == 'Ice Cream' %}
+              Churned buffalo milk infused with smoked Tahitian vanilla bean, salted birch honey honeycomb, and crisp cocoa tuile.
+            {% else %}
+              Freshly crafted daily from the morning hearth delivery. Available in {{ item.size }} tasting format.
+            {% endif %}
+          </p>
+
+          <!-- Flavor Profile Breakdown -->
+          <div class="flavor-radar">
+            <div class="flavor-radar-header">
+              <span>SENSORY INTENSITY</span>
+              <span>BALANCED</span>
+            </div>
+            <div class="flavor-bars-container">
+              <div class="flavor-bar-row">
+                <span class="flavor-name">UMAMI</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 88%;"></div></div>
+              </div>
+              <div class="flavor-bar-row">
+                <span class="flavor-name">SMOKE</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 72%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-card-footer">
+            <button 
+              type="button" 
+              class="btn btn-ghost btn-sm"
+              onclick="addToTastingFlight('{{ item.name }}', '{% if item.price == 'Free' %}0{% else %}{{ item.price }}{% endif %}')"
+            >
+              <span>+ Add to Flight</span>
+            </button>
+            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-gold);">
+              {{ item.size }} Format
+            </span>
+          </div>
+
+        </div>
+      </article>
+      {% endfor %}
+
+      <!-- ==========================================
+           CURATED EDITORIAL DISHES (REPERTOIRE)
+           ========================================== -->
+      <!-- Dish 1: Langoustine -->
+      <article 
+        class="menu-card reveal-on-scroll stagger-1" 
+        data-category="signature crudo"
+        data-tags="special gf"
+        data-name="charred brittany langoustine spruce kelp"
+        data-desc="wild caught langoustine white birch pine needle emulsion"
+      >
+        <div class="menu-card-media">
+          <img 
+            src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" 
+            alt="Charred Brittany Langoustine" 
+            loading="lazy"
+          >
+          <span class="card-category-badge">Signature &bull; Crudo</span>
+          <span class="card-portion-badge">Single Course</span>
+          <span class="card-price-tag">$48</span>
+        </div>
+        <div class="menu-card-body">
+          <h3 class="menu-card-title">Charred Brittany Langoustine</h3>
+          <p class="menu-card-desc">
+            Sustainably wild-harvested langoustine seared briefly on white birch embers, finished with cold-pressed spruce needles, verbena emulsion, and sea kelp powder.
+          </p>
+          <div class="flavor-radar">
+            <div class="flavor-radar-header">
+              <span>SENSORY INTENSITY</span>
+              <span>OCEAN / RESIN</span>
+            </div>
+            <div class="flavor-bars-container">
+              <div class="flavor-bar-row">
+                <span class="flavor-name">UMAMI</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 85%;"></div></div>
+              </div>
+              <div class="flavor-bar-row">
+                <span class="flavor-name">ACID</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 65%;"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="menu-card-footer">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="addToTastingFlight('Charred Brittany Langoustine', 48)">
+              <span>+ Add to Flight</span>
+            </button>
+            <span class="badge badge-gold">Chef's Star</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Dish 2: Wagyu Tenderloin -->
+      <article 
+        class="menu-card reveal-on-scroll stagger-2" 
+        data-category="mains signature"
+        data-tags="special gf"
+        data-name="dry aged a5 wagyu tenderloin black garlic bone marrow"
+        data-desc="koji cured prime beef glazed three year black garlic garum charred leek ash"
+      >
+        <div class="menu-card-media">
+          <img 
+            src="https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80" 
+            alt="Dry Aged A5 Wagyu Tenderloin" 
+            loading="lazy"
+          >
+          <span class="card-category-badge">Hearth Main</span>
+          <span class="card-portion-badge">Tasting Portion</span>
+          <span class="card-price-tag">$65</span>
+        </div>
+        <div class="menu-card-body">
+          <h3 class="menu-card-title">Dry-Aged Wagyu &amp; Fermented Garlic</h3>
+          <p class="menu-card-desc">
+            Koji-cured prime beef roasted over oak coals, glazed in 3-year black garlic garum, smoked marrow glaze, and roasted baby leek emulsion.
+          </p>
+          <div class="flavor-radar">
+            <div class="flavor-radar-header">
+              <span>SENSORY INTENSITY</span>
+              <span>SMOKE / EARTH</span>
+            </div>
+            <div class="flavor-bars-container">
+              <div class="flavor-bar-row">
+                <span class="flavor-name">SAVORY</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 95%;"></div></div>
+              </div>
+              <div class="flavor-bar-row">
+                <span class="flavor-name">SMOKE</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 90%;"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="menu-card-footer">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="addToTastingFlight('Dry-Aged Wagyu & Black Garlic', 65)">
+              <span>+ Add to Flight</span>
+            </button>
+            <span class="badge badge-sage">Woodfire Hearth</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Dish 3: Alpine Chanterelles Tartlet -->
+      <article 
+        class="menu-card reveal-on-scroll stagger-3" 
+        data-category="crudo"
+        data-tags="veg special"
+        data-name="alpine chanterelles tartlet fermented emmentaler thyme"
+        data-desc="foraged golden chanterelles wild thyme butter crispy buckwheat tart"
+      >
+        <div class="menu-card-media">
+          <img 
+            src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" 
+            alt="Alpine Chanterelles Tartlet" 
+            loading="lazy"
+          >
+          <span class="card-category-badge">Small Plate</span>
+          <span class="card-portion-badge">Course 02</span>
+          <span class="card-price-tag">$28</span>
+        </div>
+        <div class="menu-card-body">
+          <h3 class="menu-card-title">Wild Chanterelle &amp; Buckwheat Tart</h3>
+          <p class="menu-card-desc">
+            Hand-foraged golden mountain chanterelles sautéed in hazelnut butter, served in a crisp buckwheat tart shell with aged Alpine cheese foam.
+          </p>
+          <div class="flavor-radar">
+            <div class="flavor-radar-header">
+              <span>SENSORY INTENSITY</span>
+              <span>EARTH / NUTTY</span>
+            </div>
+            <div class="flavor-bars-container">
+              <div class="flavor-bar-row">
+                <span class="flavor-name">EARTH</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 82%;"></div></div>
+              </div>
+              <div class="flavor-bar-row">
+                <span class="flavor-name">CRUNCH</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 78%;"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="menu-card-footer">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="addToTastingFlight('Wild Chanterelle Tart', 28)">
+              <span>+ Add to Flight</span>
+            </button>
+            <span class="badge badge-sage">Vegetarian</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Dish 4: Smoked Duck Breast -->
+      <article 
+        class="menu-card reveal-on-scroll" 
+        data-category="mains"
+        data-tags="special gf"
+        data-name="smoked heritage duck breast cherry blossom vinegar elderberry"
+        data-desc="dry aged pekin duck smoked lavender cherry reduction"
+      >
+        <div class="menu-card-media">
+          <img 
+            src="https://images.unsplash.com/photo-1514944298352-78d128ba77a3?auto=format&fit=crop&w=800&q=80" 
+            alt="Smoked Heritage Duck Breast" 
+            loading="lazy"
+          >
+          <span class="card-category-badge">Hearth Main</span>
+          <span class="card-portion-badge">Course 07</span>
+          <span class="card-price-tag">$52</span>
+        </div>
+        <div class="menu-card-body">
+          <h3 class="menu-card-title">Glazed Heritage Duck &amp; Elderberry</h3>
+          <p class="menu-card-desc">
+            Dry-aged duck breast smoked over grapevine cuttings, lacquered in elderberry syrup and served with salt-baked beetroot and bitter radicchio.
+          </p>
+          <div class="flavor-radar">
+            <div class="flavor-radar-header">
+              <span>SENSORY INTENSITY</span>
+              <span>FRUIT / TANNIN</span>
+            </div>
+            <div class="flavor-bars-container">
+              <div class="flavor-bar-row">
+                <span class="flavor-name">SWEET/ACID</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 75%;"></div></div>
+              </div>
+              <div class="flavor-bar-row">
+                <span class="flavor-name">SMOKE</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 80%;"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="menu-card-footer">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="addToTastingFlight('Glazed Heritage Duck', 52)">
+              <span>+ Add to Flight</span>
+            </button>
+            <span class="badge badge-gold">Cellar Match</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Dish 5: Wild Blackberry & Birch Sap -->
+      <article 
+        class="menu-card reveal-on-scroll" 
+        data-category="desserts signature"
+        data-tags="veg gf"
+        data-name="wild blackberry birch sap frozen honeycomb fir essence dessert"
+        data-desc="mountain berries frozen nitrogen birch sap crisps smoked honey"
+      >
+        <div class="menu-card-media">
+          <img 
+            src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80" 
+            alt="Wild Blackberry & Birch Sap" 
+            loading="lazy"
+          >
+          <span class="card-category-badge">Botanical Sweet</span>
+          <span class="card-portion-badge">Course 13</span>
+          <span class="card-price-tag">$32</span>
+        </div>
+        <div class="menu-card-body">
+          <h3 class="menu-card-title">Wild Blackberry &amp; Birch Epilogue</h3>
+          <p class="menu-card-desc">
+            Crisp spheres of mountain blackberries flash-frozen with birch sap meringue, smoked alpine honey crumble, and a mist of mountain fir.
+          </p>
+          <div class="flavor-radar">
+            <div class="flavor-radar-header">
+              <span>SENSORY INTENSITY</span>
+              <span>COLD / FLORAL</span>
+            </div>
+            <div class="flavor-bars-container">
+              <div class="flavor-bar-row">
+                <span class="flavor-name">ACID</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 86%;"></div></div>
+              </div>
+              <div class="flavor-bar-row">
+                <span class="flavor-name">SWEET</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 60%;"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="menu-card-footer">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="addToTastingFlight('Wild Blackberry Epilogue', 32)">
+              <span>+ Add to Flight</span>
+            </button>
+            <span class="badge badge-sage">Botanical</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Dish 6: Scallop Crudo with Yuzu -->
+      <article 
+        class="menu-card reveal-on-scroll" 
+        data-category="crudo"
+        data-tags="special gf"
+        data-name="hokkaido scallop crudo yuzu fermented gooseberry cold pressed shiso"
+        data-desc="raw diver scallop citrus acidity herbal shiso oil"
+      >
+        <div class="menu-card-media">
+          <img 
+            src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=800&q=80" 
+            alt="Hokkaido Scallop Crudo" 
+            loading="lazy"
+          >
+          <span class="card-category-badge">Crudo &bull; Raw</span>
+          <span class="card-portion-badge">Course 01</span>
+          <span class="card-price-tag">$36</span>
+        </div>
+        <div class="menu-card-body">
+          <h3 class="menu-card-title">Hokkaido Scallop &amp; Shiso Emulsion</h3>
+          <p class="menu-card-desc">
+            Day-boat sea scallop thinly sliced on chilled Himalayan crystal salt, bathed in fermented green gooseberry juice and cold-extracted purple shiso oil.
+          </p>
+          <div class="flavor-radar">
+            <div class="flavor-radar-header">
+              <span>SENSORY INTENSITY</span>
+              <span>CRISP / CITRIC</span>
+            </div>
+            <div class="flavor-bars-container">
+              <div class="flavor-bar-row">
+                <span class="flavor-name">ACID</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 92%;"></div></div>
+              </div>
+              <div class="flavor-bar-row">
+                <span class="flavor-name">FRESH</span>
+                <div class="flavor-track"><div class="flavor-fill" style="width: 96%;"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="menu-card-footer">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="addToTastingFlight('Hokkaido Scallop Crudo', 36)">
+              <span>+ Add to Flight</span>
+            </button>
+            <span class="badge badge-gold">Prelude</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Empty State Message -->
+    <div id="noResultsBox" style="display: none; text-align: center; padding: 4rem 1rem;">
+      <div style="font-family: var(--font-display); font-size: 1.6rem; color: #FFF; margin-bottom: 0.5rem;">No Dishes Match Your Query</div>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">Try relaxing your dietary filters or searching for terms like 'Truffle', 'Wagyu', or 'Crudo'.</p>
+      <button type="button" class="btn btn-outline-gold" onclick="resetAllFilters()">Reset All Filters</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================================
+     HORIZONTAL SCROLL: CELLAR & FERMENTATION VAULT
+     ========================================================================== -->
+<section class="cellar-scroll-section" id="cellar">
+  <div class="container">
+    <div class="reveal-on-scroll">
+      <div class="eyebrow">SUBTERRANEAN TREASURES</div>
+      <h2 class="section-title">The Fermentation Vault &amp; Cellar</h2>
+      <p class="section-subtitle">
+        Beyond raw ingredients lies time itself. Explore our private-label microbial extractions, house-made koji vinegars, and biodynamic vintages.
+      </p>
+    </div>
+
+    <div class="cellar-carousel">
+      
+      <div class="cellar-card">
+        <span class="cellar-tag">AGED 4 YEARS</span>
+        <h3 class="cellar-title">Black Garlic &amp; Barley Garum</h3>
+        <p class="cellar-desc">
+          Slowly digested in heated stone vessels with roasted heirloom barley and wild salt brine. The backbone of our deepest umami glazes.
+        </p>
+      </div>
+
+      <div class="cellar-card">
+        <span class="cellar-tag">NATURAL VINTAGE 2017</span>
+        <h3 class="cellar-title">Domaine Jura Savagnin Sous Voile</h3>
+        <p class="cellar-desc">
+          Oxidative, nutty, with electric saline tension. Paired exclusively with our alpine chanterelles and aged comt&eacute; cheese course.
+        </p>
+      </div>
+
+      <div class="cellar-card">
+        <span class="cellar-tag">ZERO WASTE EXTRACTION</span>
+        <h3 class="cellar-title">Highland Spruce Needle Cordial</h3>
+        <p class="cellar-desc">
+          Foraged in early spring, macerated in wild mountain honey and fermented over six moons into a botanical digestif.
+        </p>
+      </div>
+
+      <div class="cellar-card">
+        <span class="cellar-tag">CHEF RESERVE CIDER</span>
+        <h3 class="cellar-title">Wild Crabapple Pét-Nat</h3>
+        <p class="cellar-desc">
+          Naturally carbonated in bottle with ancestral yeasts. Crisp tannin and sour apple skin notes that pierce rich hearth fats.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     TASTING MENU TIERS COMPARISON
+     ========================================================================== -->
+<section class="tasting-tiers-section" id="tasting-tiers">
+  <div class="container">
+    
+    <div style="text-align: center; max-width: 680px; margin: 0 auto;" class="reveal-on-scroll">
+      <div class="eyebrow" style="justify-content: center;">EXPERIENCE TIERS</div>
+      <h2 class="section-title">Curated Tasting Progressions</h2>
+      <p class="section-subtitle" style="margin: 0 auto;">
+        Choose between three distinct journeys tailored to your appetite and curiosity. Wine and non-alcoholic botanical pairings are available for each.
+      </p>
+    </div>
+
+    <div class="tasting-tiers-grid">
+      
+      <!-- Tier 1 -->
+      <div class="tier-card reveal-on-scroll stagger-1">
+        <h3 class="tier-name">The Prelude</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">An essential introduction to our hearth and foraging ethos.</p>
+        <div class="tier-price-row">
+          <span class="tier-price">$125</span>
+          <span class="tier-price-sub">/ guest</span>
+        </div>
+        <ul class="tier-features">
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            5 Curated Courses
+          </li>
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Dining Duration: 1.5 Hours
+          </li>
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Main Dining Room Seating
+          </li>
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Optional Sommelier Pairing (+$75)
+          </li>
+        </ul>
+        <button type="button" class="btn btn-outline-gold btn-block" onclick="openReservationModal()">
+          <span>Reserve The Prelude</span>
+        </button>
+      </div>
+
+      <!-- Tier 2 (Featured) -->
+      <div class="tier-card featured reveal-on-scroll stagger-2">
+        <span class="tier-ribbon">MOST ACCLAIMED</span>
+        <h3 class="tier-name">The Terroir Odyssey</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">Our benchmark expression spanning the four sensory chapters.</p>
+        <div class="tier-price-row">
+          <span class="tier-price">$195</span>
+          <span class="tier-price-sub">/ guest</span>
+        </div>
+        <ul class="tier-features">
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            9 Immersive Courses
+          </li>
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Includes Wagyu &amp; Langoustine Acts
+          </li>
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Dining Duration: 2.25 Hours
+          </li>
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Choice of Rare Wine or Botanical Pairing (+$115)
+          </li>
+        </ul>
+        <button type="button" class="btn btn-gold btn-block" onclick="openReservationModal()">
+          <span>Reserve The Odyssey</span>
+        </button>
+      </div>
+
+      <!-- Tier 3 -->
+      <div class="tier-card reveal-on-scroll stagger-3">
+        <h3 class="tier-name">Grand Immersion</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">The complete 14-act masterpiece seated directly at the hearth counter.</p>
+        <div class="tier-price-row">
+          <span class="tier-price">$285</span>
+          <span class="tier-price-sub">/ guest</span>
+        </div>
+        <ul class="tier-features">
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            14 Comprehensive Courses
+          </li>
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Front Row Chef’s Counter Seating
+          </li>
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Direct Dialog with Chef Julian Vance
+          </li>
+          <li class="tier-feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Cellar Reserve Cru Grand Pairing Included
+          </li>
+        </ul>
+        <button type="button" class="btn btn-outline-gold btn-block" onclick="openReservationModal()">
+          <span>Reserve Grand Immersion</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================================
+     FLOATING TASTING FLIGHT BAR (INTERACTIVE WIDGET)
+     ========================================================================== -->
+<div class="floating-flight-bar" id="floatingFlightBar">
+  <div class="flight-bar-info">
+    <div class="flight-counter-circle" id="flightCounterCircle">0</div>
+    <div>
+      <div class="flight-text-title">Your Tasting Flight</div>
+      <div class="flight-text-meta" id="flightBarMeta">0 Courses Selected</div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-gold btn-sm" onclick="openFlightDrawer()">
+    <span>Review Flight</span>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
+  </button>
+</div>
+
+<!-- ==========================================================================
+     TASTING FLIGHT DRAWER / MODAL
+     ========================================================================== -->
+<div class="flight-drawer-backdrop" id="flightDrawerBackdrop" onclick="handleFlightBackdropClick(event)">
+  <div class="flight-drawer-panel">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle);">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 0.2rem;">CUSTOM PROGRESSION</div>
+        <h3 style="font-family: var(--font-display); font-size: 1.5rem; color: #FFF;">My Tasting Flight</h3>
+      </div>
+      <button type="button" class="modal-close-btn" onclick="closeFlightDrawer()" aria-label="Close flight drawer">✕</button>
+    </div>
+
+    <ul class="flight-items-list" id="flightItemsList">
+      <!-- Dynamically filled by JS -->
+    </ul>
+
+    <div style="padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 1rem;">
+      <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.88rem; color: #FFF;">
+        <span>Estimated Tasting Total:</span>
+        <span style="color: var(--accent-gold); font-weight: 700;" id="flightTotalPrice">$0</span>
+      </div>
+      <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.5;">
+        * This customized flight will be synchronized with our kitchen team upon table reservation.
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <button type="button" class="btn btn-gold btn-block" onclick="closeFlightDrawer(); openReservationModal();">
+          <span>Book Table with This Flight</span>
+        </button>
+        <button type="button" class="btn btn-ghost" onclick="clearTastingFlight()" title="Clear all selections">
+          <span>Clear</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // ==========================================
+  // CLIENT-SIDE FILTERING & LIVE SEARCH ENGINE
+  // ==========================================
+  let activeCategory = 'all';
+  let activeDietary = new Set();
+  let tastingFlight = [];
+
+  function switchCategory(btn, cat) {
+    document.querySelectorAll('.cat-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCategory = cat;
+    filterDishes();
+  }
+
+  function toggleDietaryFilter(chip, dietKey) {
+    chip.classList.toggle('selected');
+    if (activeDietary.has(dietKey)) {
+      activeDietary.delete(dietKey);
+    } else {
+      activeDietary.add(dietKey);
+    }
+    filterDishes();
+  }
+
+  function handleSearchFilter() {
+    filterDishes();
+  }
+
+  function filterDishes() {
+    const query = document.getElementById('menuSearchInput').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.menu-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const cardCategory = card.getAttribute('data-category') || '';
+      const cardTags = card.getAttribute('data-tags') || '';
+      const cardName = card.getAttribute('data-name') || '';
+      const cardDesc = card.getAttribute('data-desc') || '';
+
+      // Category matching
+      const matchesCategory = (activeCategory === 'all') || cardCategory.includes(activeCategory);
+
+      // Dietary matching (all selected must be present in cardTags)
+      let matchesDietary = true;
+      activeDietary.forEach(diet => {
+        if (!cardTags.includes(diet)) {
+          matchesDietary = false;
+        }
+      });
+
+      // Search matching
+      let matchesSearch = true;
+      if (query.length > 0) {
+        matchesSearch = cardName.includes(query) || cardDesc.includes(query);
+      }
+
+      if (matchesCategory && matchesDietary && matchesSearch) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Update Counter Label
+    const countLabel = document.getElementById('dishCountLabel');
+    const noResultsBox = document.getElementById('noResultsBox');
+    if (countLabel) {
+      countLabel.textContent = `${visibleCount} Plate${visibleCount === 1 ? '' : 's'} Available`;
+    }
+
+    if (noResultsBox) {
+      noResultsBox.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  }
+
+  function resetAllFilters() {
+    document.getElementById('menuSearchInput').value = '';
+    activeCategory = 'all';
+    activeDietary.clear();
+    document.querySelectorAll('.cat-tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', i === 0);
+    });
+    document.querySelectorAll('.dietary-chip').forEach(c => c.classList.remove('selected'));
+    filterDishes();
+  }
+
+  // ==========================================
+  // TASTING FLIGHT BUILDER
+  // ==========================================
+  function addToTastingFlight(dishName, priceStr) {
+    const price = parseInt(priceStr, 10) || 0;
+    tastingFlight.push({ name: dishName, price: price });
+    updateFlightUI();
+    showAuraToast(
+      'Flight Updated',
+      `"${dishName}" has been appended to your tasting flight itinerary.`,
+      'gold'
+    );
+  }
+
+  function removeFromTastingFlight(index) {
+    tastingFlight.splice(index, 1);
+    updateFlightUI();
+  }
+
+  function clearTastingFlight() {
+    tastingFlight = [];
+    updateFlightUI();
+    closeFlightDrawer();
+    showAuraToast('Flight Cleared', 'Your tasting flight list has been reset.', 'gold');
+  }
+
+  function updateFlightUI() {
+    const bar = document.getElementById('floatingFlightBar');
+    const circle = document.getElementById('flightCounterCircle');
+    const meta = document.getElementById('flightBarMeta');
+    const list = document.getElementById('flightItemsList');
+    const totalElem = document.getElementById('flightTotalPrice');
+
+    const count = tastingFlight.length;
+    circle.textContent = count;
+
+    let total = 0;
+    tastingFlight.forEach(item => total += item.price);
+    totalElem.textContent = `$${total}`;
+
+    meta.textContent = `${count} Course${count === 1 ? '' : 's'} Selected &bull; Est. $${total}`;
+
+    if (count > 0) {
+      bar.classList.add('visible');
+    } else {
+      bar.classList.remove('visible');
+    }
+
+    // Render list
+    if (list) {
+      if (count === 0) {
+        list.innerHTML = `
+          <li style="text-align: center; color: var(--text-muted); padding: 3rem 1rem;">
+            Your flight is currently empty.<br>Click "+ Add to Flight" on any dish to compose your tasting progression.
+          </li>
+        `;
+      } else {
+        list.innerHTML = tastingFlight.map((item, idx) => `
+          <li class="flight-item-row">
+            <div>
+              <div class="flight-item-name">${item.name}</div>
+              <div class="flight-item-price">${item.price === 0 ? 'Complimentary' : '$' + item.price}</div>
+            </div>
+            <button type="button" onclick="removeFromTastingFlight(${idx})" style="color: var(--text-muted); padding: 0.3rem 0.6rem; font-size: 0.8rem;" title="Remove dish">
+              ✕
+            </button>
+          </li>
+        `).join('');
+      }
+    }
+  }
+
+  function openFlightDrawer() {
+    const drawer = document.getElementById('flightDrawerBackdrop');
+    if (drawer) {
+      drawer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeFlightDrawer() {
+    const drawer = document.getElementById('flightDrawerBackdrop');
+    if (drawer) {
+      drawer.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function handleFlightBackdropClick(e) {
+    if (e.target.id === 'flightDrawerBackdrop') {
+      closeFlightDrawer();
+    }
+  }
+
+  // Initialize counter on load
+  document.addEventListener('DOMContentLoaded', () => {
+    filterDishes();
+    updateFlightUI();
+  });
+</script>
 {% endblock %}

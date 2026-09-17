@@ -251,3 +251,6 @@ def dob(request, dob):
 
 def menu(request, category, subcat=""):
     return HttpResponse(f"<h2>You have chosen category: {category} | You have chosen sub cat: {subcat}</h2>")
+
+def csstest(request):
+    return render(request, 'testcss.html')

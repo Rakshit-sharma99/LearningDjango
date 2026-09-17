@@ -1,36 +1,102 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
-li {
-  float: left;
-}
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-li a:hover {
-  background-color: #111;
-}
-</style>
-</head>
-<body>
+<header class="site-header" id="siteHeader">
+  <div class="header-container">
+    <!-- Brand Logo -->
+    <a href="{% url 'home' %}" class="brand-logo" aria-label="AURA Haute Gastronomie Home">
+      <div class="logo-mark">
+        <svg width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18.5" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.4"/>
+          <path d="M20 5L24 16L35 20L24 24L20 35L16 24L5 20L16 16L20 5Z" fill="currentColor" fill-opacity="0.85"/>
+          <circle cx="20" cy="20" r="2.5" fill="#0B0C0E"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="brand-name">AURA</span>
+        <span class="brand-tagline">HAUTE GASTRONOMIE</span>
+      </div>
+    </a>
 
-<ul>
-  <li><a href="{% url 'home' %}">Home</a></li>
-  <li><a href="{% url 'about' %}">About</a></li>
-  <li><a href="{% url 'food' %}">Food</a></li>
-</ul>
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav" aria-label="Primary Navigation">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+            <span>Home</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'food' %}" class="nav-link {% if request.resolver_match.url_name == 'food' %}active{% endif %}">
+            <span>Culinary Repertoire</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'about' %}" class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+            <span>The Atelier</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
 
-</body>
-</html>
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <a href="tel:+18005552872" class="header-phone-link" aria-label="Call concierge">
+        <span class="phone-pulse"></span>
+        <span class="phone-label">Concierge</span>
+      </a>
+      <button type="button" class="btn btn-gold btn-sm reserve-trigger" onclick="openReservationModal()">
+        <span>Reserve a Table</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Overlay -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="mobile-drawer-inner">
+      <div class="mobile-drawer-header">
+        <span class="drawer-label">AURA ATELIER NAVIGATION</span>
+        <button type="button" class="drawer-close" id="drawerClose" aria-label="Close menu">✕</button>
+      </div>
+      <ul class="mobile-nav-list">
+        <li>
+          <a href="{% url 'home' %}" class="mobile-nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+            <span class="nav-num">01</span>
+            <span class="nav-title">Home</span>
+            <span class="nav-sub">The Grand Entrance &amp; Experience</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'food' %}" class="mobile-nav-link {% if request.resolver_match.url_name == 'food' %}active{% endif %}">
+            <span class="nav-num">02</span>
+            <span class="nav-title">Culinary Repertoire</span>
+            <span class="nav-sub">Tasting Menus, Dishes &amp; Cellar</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'about' %}" class="mobile-nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+            <span class="nav-num">03</span>
+            <span class="nav-title">The Atelier</span>
+            <span class="nav-sub">Our Philosophy, Terroir &amp; Team</span>
+          </a>
+        </li>
+      </ul>
+      <div class="mobile-drawer-footer">
+        <button type="button" class="btn btn-gold btn-block" onclick="openReservationModal(); closeMobileMenu();">
+          <span>Reserve a Table</span>
+        </button>
+        <div class="mobile-drawer-meta">
+          <p>Michelin Guide 2026 • Three Stars</p>
+          <p>Open Tuesday – Sunday | 18:00 – 23:30</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

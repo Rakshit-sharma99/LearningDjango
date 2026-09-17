@@ -31,4 +31,5 @@ urlpatterns = [
     re_path(r'^dob/(?P<dob>\d{4}-\d{2}-\d{2})/$', views.dob, name='dob'),
     re_path(r'^menu/(?P<category>[\w -]+)/(?:(?P<subcat>[\w -]*)/)?$', views.menu, name='menu'),
     # re_path(r'^fooddata/(?P<fooddata>[\w -]+)/?:(?P<item_name>[\w -]*)/)?$', views.fooddata, name='fooddata'),
+    path('csstest/', views.csstest, name='csstest'),
 ]

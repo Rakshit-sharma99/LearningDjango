@@ -1,14 +1,1197 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
-Home page
-{%block css%}
-p {
-    color: blue;
-    font-size: 18px;
+{% load static %}
+
+{% block title %}AURA • Haute Gastronomie &amp; Botanical Atelier{% endblock %}
+
+{% block css %}
+/* ==========================================================================
+   HOME PAGE SPECIFIC STYLES
+   ========================================================================== */
+.hero-section {
+  position: relative;
+  padding: clamp(3rem, 6vw, 6rem) 0 clamp(4rem, 8vw, 7rem);
+  overflow: hidden;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 4rem;
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-accolade-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.95rem;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-full);
+  margin-bottom: 1.5rem;
+}
+.hero-accolade-pill .star-icon {
+  color: var(--accent-gold);
+  font-size: 0.9rem;
+}
+.hero-accolade-pill .pill-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--accent-gold-light);
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #FFF;
+  margin-bottom: 1.5rem;
+}
+.hero-title .italic-accent {
+  font-style: italic;
+  color: var(--accent-gold);
+  font-weight: 400;
+}
+
+.hero-lead {
+  font-size: clamp(1.05rem, 1.6vw, 1.22rem);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 580px;
+  margin-bottom: 2.25rem;
+}
+
+.hero-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Soundscape Ambient Simulator */
+.soundscape-toggle-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.6rem 1.15rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.soundscape-toggle-card:hover {
+  border-color: var(--border-gold);
+  color: #FFF;
+  background: rgba(212, 175, 55, 0.05);
+}
+.sound-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 14px;
+}
+.sound-bar {
+  width: 2.5px;
+  background: var(--accent-gold);
+  border-radius: 2px;
+  height: 4px;
+  transition: height 0.2s ease;
+}
+.soundscape-toggle-card.playing .sound-bar:nth-child(1) { animation: soundWave 1.2s infinite ease-in-out; }
+.soundscape-toggle-card.playing .sound-bar:nth-child(2) { animation: soundWave 0.8s infinite ease-in-out 0.2s; }
+.soundscape-toggle-card.playing .sound-bar:nth-child(3) { animation: soundWave 1.4s infinite ease-in-out 0.4s; }
+.soundscape-toggle-card.playing .sound-bar:nth-child(4) { animation: soundWave 1.0s infinite ease-in-out 0.1s; }
+
+@keyframes soundWave {
+  0%, 100% { height: 3px; }
+  50% { height: 14px; }
+}
+
+/* Hero Visual Composition */
+.hero-visual-frame {
+  position: relative;
+}
+
+.hero-main-card {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border-gold);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(212, 175, 55, 0.12);
+  background: var(--bg-secondary);
+  aspect-ratio: 4 / 4.7;
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--transition-smooth);
+}
+.hero-main-card:hover .hero-img {
+  transform: scale(1.04);
+}
+
+.hero-img-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 12, 14, 0.1) 0%, rgba(11, 12, 14, 0.7) 100%);
+  pointer-events: none;
+}
+
+/* Floating Badges on Hero Image */
+.hero-floating-badge {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 1.75rem;
+  right: 1.75rem;
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--radius-md);
+  background: rgba(11, 12, 14, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-medium);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.floating-dish-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #FFF;
+}
+.floating-dish-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 0.15rem;
+}
+
+.hero-seal {
+  position: absolute;
+  top: -1.5rem;
+  right: -1rem;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: slowSpin 25s linear infinite;
+}
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Concept Marquee Ticker */
+.marquee-wrapper {
+  width: 100%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 1.1rem 0;
+  position: relative;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 3rem;
+  animation: marqueeScroll 32s linear infinite;
+}
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.marquee-item .dot {
+  color: var(--accent-gold);
+  font-size: 0.9rem;
+}
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Proof Points & Stats Grid */
+.stats-section {
+  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+@media (min-width: 900px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+  }
+}
+.stat-card {
+  padding: 1.75rem;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card:hover {
+  border-color: var(--border-gold);
+  transform: translateY(-4px);
+  background: var(--bg-card-hover);
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--accent-gold);
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4vw, 3.2rem);
+  font-weight: 600;
+  color: var(--accent-gold-light);
+  line-height: 1;
+  margin-bottom: 0.6rem;
+}
+.stat-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #FFF;
+  margin-bottom: 0.35rem;
+}
+.stat-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Signatures Section */
+.signatures-section {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+}
+.signatures-header-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+@media (min-width: 768px) {
+  .signatures-header-row {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.signatures-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 680px) {
+  .signatures-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1100px) {
+  .signatures-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.dish-card {
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-base);
+  position: relative;
+}
+.dish-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-gold);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(212, 175, 55, 0.1);
+}
+
+.dish-media {
+  position: relative;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+.dish-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--transition-smooth);
+}
+.dish-card:hover .dish-media img {
+  transform: scale(1.08);
+}
+
+.dish-course-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(11, 12, 14, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent-gold);
+  border: 1px solid var(--border-gold);
+}
+
+.dish-price-badge {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(11, 12, 14, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #FFF;
+  border: 1px solid var(--border-medium);
+}
+
+.dish-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dish-name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: #FFF;
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
+}
+
+.dish-provenance {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  flex: 1;
+}
+
+.dish-notes-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+.flavor-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.dish-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1rem;
+}
+
+/* The Four-Chapter Sensory Journey */
+.journey-section {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.journey-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+}
+@media (min-width: 640px) {
+  .journey-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .journey-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.journey-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-base);
+  position: relative;
+}
+.journey-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-gold);
+  background: var(--bg-card-hover);
+}
+
+.journey-num {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-gold);
+  margin-bottom: 1.5rem;
+  display: block;
+}
+.journey-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: #FFF;
+  margin-bottom: 0.75rem;
+}
+.journey-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* Chef Spotlight Section */
+.chef-section {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+}
+.chef-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+@media (min-width: 992px) {
+  .chef-grid {
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 4.5rem;
+  }
+}
+
+.chef-portrait-wrap {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border-gold);
+  box-shadow: var(--shadow-elevated);
+  aspect-ratio: 4 / 5;
+}
+.chef-portrait-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.chef-stamp {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(11, 12, 14, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent-gold);
+}
+
+.chef-quote {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+  font-style: italic;
+  line-height: 1.4;
+  color: #FFF;
+  margin-bottom: 1.75rem;
+  position: relative;
+}
+.chef-quote::before {
+  content: '“';
+  font-size: 4rem;
+  position: absolute;
+  top: -2rem;
+  left: -1.5rem;
+  color: rgba(212, 175, 55, 0.2);
+  line-height: 1;
+}
+
+.chef-bio {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 2rem;
+}
+
+.chef-signature-row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.chef-name-title {
+  display: flex;
+  flex-direction: column;
+}
+.chef-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: #FFF;
+  font-weight: 600;
+}
+.chef-role {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.1em;
+}
+
+/* Reviews & Accolades */
+.reviews-section {
+  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.015);
+}
+.reviews-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+@media (min-width: 768px) {
+  .reviews-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.review-card {
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.review-stars {
+  color: var(--accent-gold);
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+}
+.review-text {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: #FFF;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+.review-author {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Hearth VIP Banner */
+.vip-banner-section {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+}
+.vip-banner-box {
+  border-radius: var(--radius-xl);
+  background: radial-gradient(circle at 75% 30%, rgba(212, 175, 55, 0.12) 0%, rgba(18, 21, 27, 0.95) 70%);
+  border: 1px solid var(--border-gold);
+  padding: clamp(2.5rem, 5vw, 4.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(212, 175, 55, 0.1);
+}
+@media (min-width: 900px) {
+  .vip-banner-box {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 {% endblock %}
 
 {% block content %}
-    <p>Welcome to the home page!</p>
+<!-- ==========================================================================
+     HERO SECTION
+     ========================================================================== -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-grid">
+      
+      <!-- Left Column: Copy & CTAs -->
+      <div class="hero-content reveal-on-scroll">
+        <div class="hero-accolade-pill">
+          <span class="star-icon">★ ★ ★</span>
+          <span class="pill-text">MICHELIN GUIDE 2026 • THREE STARS</span>
+        </div>
 
+        <h1 class="hero-title">
+          Crafting sensory <br>
+          <span class="italic-accent">memories</span> through haute gastronomie.
+        </h1>
+
+        <p class="hero-lead">
+          Where sustainably foraged highland botanicals meet the primal heat of ancient oak embers. An avant-garde culinary sanctuary choreographed to awaken your senses.
+        </p>
+
+        <div class="hero-cta-group">
+          <button type="button" class="btn btn-gold btn-lg" onclick="openReservationModal()">
+            <span>Reserve Table</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+          
+          <a href="{% url 'food' %}" class="btn btn-outline-gold btn-lg">
+            <span>Explore Menu</span>
+          </a>
+
+          <!-- Ambiance Soundscape Simulator -->
+          <div class="soundscape-toggle-card" id="soundscapeBtn" onclick="toggleAmbianceSoundscape()" title="Simulate Dining Room Hearth Ambiance">
+            <div class="sound-bars">
+              <div class="sound-bar"></div>
+              <div class="sound-bar"></div>
+              <div class="sound-bar"></div>
+              <div class="sound-bar"></div>
+            </div>
+            <span id="soundscapeLabel">Hearth Soundscape: Paused</span>
+          </div>
+        </div>
+
+        <!-- Quick Experience Highlights -->
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap; pt-2;">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-gold); letter-spacing: 0.1em;">SEATING TIMES</div>
+            <div style="font-size: 0.88rem; color: #FFF; font-weight: 500;">18:00 &bull; 19:30 &bull; 21:15</div>
+          </div>
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-gold); letter-spacing: 0.1em;">LOCATION</div>
+            <div style="font-size: 0.88rem; color: #FFF; font-weight: 500;">Atelier District, Promenade</div>
+          </div>
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-gold); letter-spacing: 0.1em;">DRESS CODE</div>
+            <div style="font-size: 0.88rem; color: #FFF; font-weight: 500;">Smart Elegant</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Visual Frame -->
+      <div class="hero-visual-frame reveal-on-scroll stagger-2">
+        <div class="hero-main-card">
+          <img 
+            src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80" 
+            alt="Signature Langoustine Plating with Pine Butter" 
+            class="hero-img"
+            loading="eager"
+            onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80'"
+          >
+          <div class="hero-img-gradient-overlay"></div>
+
+          <!-- Rotating Circular Crest Seal -->
+          <div class="hero-seal" aria-hidden="true">
+            <svg width="66" height="66" viewBox="0 0 100 100">
+              <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent"/>
+              <text font-family="Space Mono" font-size="9.5" fill="#D4AF37" letter-spacing="2">
+                <textPath href="#circlePath">&bull; AURA ATELIER &bull; THREE STARS</textPath>
+              </text>
+            </svg>
+          </div>
+
+          <!-- Bottom Floating Badge on Card -->
+          <div class="hero-floating-badge">
+            <div>
+              <div class="floating-dish-title">Charred Brittany Langoustine</div>
+              <div class="floating-dish-desc">Infused with Highland Spruce needles &amp; cold-pressed verbena</div>
+            </div>
+            <a href="{% url 'food' %}" class="btn btn-gold btn-sm" style="padding: 0.45rem 0.9rem;">
+              <span>Flight</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     CONTINUOUS MARQUEE TICKER
+     ========================================================================== -->
+<div class="marquee-wrapper" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item"><span>BIODYNAMIC TERROIR</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>HYPER-LOCAL FORAGING</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>WOODFIRE HEARTH</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>ZERO-WASTE FERMENTATION</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>RARE CELLAR VINTAGES</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>CHEF'S TABLE SANCTUARY</span> <span class="dot">&bull;</span></div>
+    <!-- Duplicate for infinite loop -->
+    <div class="marquee-item"><span>BIODYNAMIC TERROIR</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>HYPER-LOCAL FORAGING</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>WOODFIRE HEARTH</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>ZERO-WASTE FERMENTATION</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>RARE CELLAR VINTAGES</span> <span class="dot">&bull;</span></div>
+    <div class="marquee-item"><span>CHEF'S TABLE SANCTUARY</span> <span class="dot">&bull;</span></div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     KEY ACCREDITATIONS & STATS MATRIX
+     ========================================================================== -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      
+      <div class="stat-card reveal-on-scroll stagger-1">
+        <div class="stat-num">3 Stars</div>
+        <div class="stat-label">Michelin Distinction</div>
+        <div class="stat-sub">Recognized for peerless sensory precision and narrative composition.</div>
+      </div>
+
+      <div class="stat-card reveal-on-scroll stagger-2">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Terroir Origin</div>
+        <div class="stat-sub">Every herb, fungal specimen, and grain harvested within 60 miles.</div>
+      </div>
+
+      <div class="stat-card reveal-on-scroll stagger-3">
+        <div class="stat-num">14 Acts</div>
+        <div class="stat-label">Sensory Progression</div>
+        <div class="stat-sub">An immersive 3-hour journey spanning earth, flame, sea, and memory.</div>
+      </div>
+
+      <div class="stat-card reveal-on-scroll stagger-4">
+        <div class="stat-num">450+</div>
+        <div class="stat-label">Curated Vintages</div>
+        <div class="stat-sub">Biodynamic, rare low-intervention labels from heritage vineyards.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     CURATED SIGNATURE CREATIONS SHOWCASE
+     ========================================================================== -->
+<section class="signatures-section">
+  <div class="container">
+    
+    <div class="signatures-header-row reveal-on-scroll">
+      <div>
+        <div class="eyebrow">CHEF'S SIGNATURES</div>
+        <h2 class="section-title">Harmonies of Hearth &amp; Soil</h2>
+        <p class="section-subtitle">
+          Each creation is born from a single day’s foraging, crafted over open embers and elevated through years of patient microbial fermentation.
+        </p>
+      </div>
+      <div>
+        <a href="{% url 'food' %}" class="btn btn-outline-gold">
+          <span>View Complete Repertoire</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="signatures-grid">
+      
+      <!-- Dish Card 1 -->
+      <article class="dish-card reveal-on-scroll stagger-1">
+        <div class="dish-media">
+          <img 
+            src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" 
+            alt="Brittany Langoustine in Spruce Needle Butter"
+            loading="lazy"
+          >
+          <span class="dish-course-badge">Course 04 &bull; Sea</span>
+          <span class="dish-price-badge">$48</span>
+        </div>
+        <div class="dish-body">
+          <h3 class="dish-name">Charred Brittany Langoustine</h3>
+          <p class="dish-provenance">
+            Wild-caught langoustine seared over white birch embers, basted in brown butter infused with green pine tips and fermented sea kelp.
+          </p>
+          <div class="dish-notes-tags">
+            <span class="flavor-pill">Umami</span>
+            <span class="flavor-pill">Smoked Herb</span>
+            <span class="flavor-pill">Gluten-Free</span>
+          </div>
+          <div class="dish-card-actions">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTasting('Charred Brittany Langoustine', 48)">
+              <span>+ Add to Tasting Flight</span>
+            </button>
+            <a href="{% url 'food' %}" style="font-size: 0.78rem; color: var(--accent-gold); font-family: var(--font-mono);">Details &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Dish Card 2 -->
+      <article class="dish-card reveal-on-scroll stagger-2">
+        <div class="dish-media">
+          <img 
+            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" 
+            alt="Aged Wagyu Tenderloin with Fermented Black Garlic"
+            loading="lazy"
+          >
+          <span class="dish-course-badge">Course 08 &bull; Hearth</span>
+          <span class="dish-price-badge">$65</span>
+        </div>
+        <div class="dish-body">
+          <h3 class="dish-name">Dry-Aged Wagyu &amp; Black Garlic</h3>
+          <p class="dish-provenance">
+            60-day koji-cured prime beef, glazed in three-year fermented black garlic garum, charred leek ash, and preserved bone marrow emulsion.
+          </p>
+          <div class="dish-notes-tags">
+            <span class="flavor-pill">Deep Savory</span>
+            <span class="flavor-pill">Oak Smoke</span>
+            <span class="flavor-pill">Chef's Special</span>
+          </div>
+          <div class="dish-card-actions">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTasting('Dry-Aged Wagyu & Black Garlic', 65)">
+              <span>+ Add to Tasting Flight</span>
+            </button>
+            <a href="{% url 'food' %}" style="font-size: 0.78rem; color: var(--accent-gold); font-family: var(--font-mono);">Details &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Dish Card 3 -->
+      <article class="dish-card reveal-on-scroll stagger-3">
+        <div class="dish-media">
+          <img 
+            src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80" 
+            alt="Alpine Truffle & Blackberry Cloud Epilogue"
+            loading="lazy"
+          >
+          <span class="dish-course-badge">Course 13 &bull; Epilogue</span>
+          <span class="dish-price-badge">$32</span>
+        </div>
+        <div class="dish-body">
+          <h3 class="dish-name">Wild Blackberry &amp; Birch Sap</h3>
+          <p class="dish-provenance">
+            Frozen birch sap crisp, mountain blackberry emulsion, smoked alpine honey crumble, and a light mist of distilled Douglas fir essence.
+          </p>
+          <div class="dish-notes-tags">
+            <span class="flavor-pill">Floral Acid</span>
+            <span class="flavor-pill">Crisp Cold</span>
+            <span class="flavor-pill">Vegetarian</span>
+          </div>
+          <div class="dish-card-actions">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="quickAddTasting('Wild Blackberry & Birch Sap', 32)">
+              <span>+ Add to Tasting Flight</span>
+            </button>
+            <a href="{% url 'food' %}" style="font-size: 0.78rem; color: var(--accent-gold); font-family: var(--font-mono);">Details &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================================
+     THE FOUR-CHAPTER SENSORY JOURNEY
+     ========================================================================== -->
+<section class="journey-section">
+  <div class="container">
+    
+    <div style="text-align: center; max-width: 720px; margin: 0 auto;" class="reveal-on-scroll">
+      <div class="eyebrow" style="justify-content: center;">THE SENSORY ARCHITECTURE</div>
+      <h2 class="section-title">Four Chapters of Transformation</h2>
+      <p class="section-subtitle" style="margin: 0 auto;">
+        Our tasting progression is not a succession of plates; it is an emotional arc choreographed across time, temperature, and elemental memory.
+      </p>
+    </div>
+
+    <div class="journey-grid">
+      
+      <div class="journey-card reveal-on-scroll stagger-1">
+        <span class="journey-num">ACT I</span>
+        <h3 class="journey-title">The Dawn Forage</h3>
+        <p class="journey-desc">
+          Highland dews, bitter wild roots, crisp mountain lichen, and chilled infusions awakening the palate with elemental vitality.
+        </p>
+      </div>
+
+      <div class="journey-card reveal-on-scroll stagger-2">
+        <span class="journey-num">ACT II</span>
+        <h3 class="journey-title">Living Ferments</h3>
+        <p class="journey-desc">
+          Complex koji cultures, ancient garums, and centuries-old vinegar mother colonies lending depth and electric umami.
+        </p>
+      </div>
+
+      <div class="journey-card reveal-on-scroll stagger-3">
+        <span class="journey-num">ACT III</span>
+        <h3 class="journey-title">The Sacred Hearth</h3>
+        <p class="journey-desc">
+          White-hot oak embers, aromatic wood smoke, direct cast-iron caramelization, and tender prime cuts kissed by primal fire.
+        </p>
+      </div>
+
+      <div class="journey-card reveal-on-scroll stagger-4">
+        <span class="journey-num">ACT IV</span>
+        <h3 class="journey-title">The Epilogue</h3>
+        <p class="journey-desc">
+          Sensory confectionary, wild berries frozen in liquid nitrogen, smoked chocolates, and warm herbal tisanes of garden chamomile.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================================
+     CHEF & PHILOSOPHY SPOTLIGHT
+     ========================================================================== -->
+<section class="chef-section">
+  <div class="container">
+    <div class="chef-grid">
+      
+      <!-- Chef Portrait Frame -->
+      <div class="chef-portrait-wrap reveal-on-scroll">
+        <img 
+          src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=1000&q=80" 
+          alt="Chef Julian Vance plating at the hearth counter"
+          loading="lazy"
+        >
+        <div class="chef-stamp">
+          HEARTH MASTER &bull; EST. 2018
+        </div>
+      </div>
+
+      <!-- Chef Philosophy Copy -->
+      <div class="chef-content reveal-on-scroll stagger-2">
+        <div class="eyebrow">THE CULINARY ARCHITECT</div>
+        <blockquote class="chef-quote">
+          “Food is our most intimate link to our planet. When you sit at our hearth, you are tasting the morning mist on the pine ridge, the patient breath of the soil, and the crackle of ancient oak.”
+        </blockquote>
+        <p class="chef-bio">
+          Trained across the legendary sanctuaries of Kyoto, San Sebastián, and the French Jura hills, Chef Julian Vance founded AURA with a single radical thesis: fine dining must discard superficial luxury in favor of intense, uncompromising reverence for terroir.
+        </p>
+        <p class="chef-bio">
+          Under his direction, AURA was awarded Three Michelin Stars and was recognized as the World's Most Sustainable Gastronomic Atelier by the World's 50 Best committee.
+        </p>
+        
+        <div class="chef-signature-row">
+          <div class="chef-name-title">
+            <span class="chef-name">Julian Vance</span>
+            <span class="chef-role">CHEF PATRON &amp; FOUNDER</span>
+          </div>
+          <a href="{% url 'about' %}" class="btn btn-outline-gold btn-sm">
+            <span>Read Atelier Story &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     REVIEWS & CRITIQUE
+     ========================================================================== -->
+<section class="reviews-section">
+  <div class="container">
+    <div style="text-align: center; max-width: 600px; margin: 0 auto;" class="reveal-on-scroll">
+      <div class="eyebrow" style="justify-content: center;">CRITICAL ACCLAIM</div>
+      <h2 class="section-title" style="font-size: 2.2rem;">Echoes of the Hearth</h2>
+    </div>
+
+    <div class="reviews-grid">
+      
+      <div class="review-card reveal-on-scroll stagger-1">
+        <div class="review-stars">★ ★ ★</div>
+        <p class="review-text">
+          “A transcendent triumph of texture, smoke, and botanical restraint. Vance has constructed one of the world’s definitive culinary experiences.”
+        </p>
+        <span class="review-author">&mdash; Michelin Guide Chief Inspector</span>
+      </div>
+
+      <div class="review-card reveal-on-scroll stagger-2">
+        <div class="review-stars">★ ★ ★ ★ ★</div>
+        <p class="review-text">
+          “AURA completely dissolves the line between theater, philosophy, and haute cuisine. Every single course will rewire how you perceive flavor.”
+        </p>
+        <span class="review-author">&mdash; Vogue Gastronomie International</span>
+      </div>
+
+      <div class="review-card reveal-on-scroll stagger-3">
+        <div class="review-stars">★ ★ ★ ★ ★</div>
+        <p class="review-text">
+          “The charred langoustine alone is worth crossing continents for. A masterclass in sustainable terroir and sublime hospitality.”
+        </p>
+        <span class="review-author">&mdash; World’s 50 Best Discovery</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     VIP HEARTH BANNER CTA
+     ========================================================================== -->
+<section class="vip-banner-section">
+  <div class="container">
+    <div class="vip-banner-box reveal-on-scroll">
+      <div>
+        <div class="eyebrow">YOUR JOURNEY AWAITS</div>
+        <h2 class="section-title" style="margin-bottom: 0.75rem;">Step into the Sensory Sanctuary</h2>
+        <p class="section-subtitle" style="margin-bottom: 0;">
+          Reservations release on the first day of each month for the subsequent 30 days. We invite you to experience the poetry of the hearth.
+        </p>
+      </div>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <button type="button" class="btn btn-gold btn-lg" onclick="openReservationModal()">
+          <span>Reserve Your Seat</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+        <a href="tel:+18005552872" class="btn btn-outline-gold btn-lg">
+          <span>Private Concierge</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Hearth Ambiance Simulator
+  let isSoundscapePlaying = false;
+  let audioCtx = null;
+  let oscillator = null;
+  let gainNode = null;
+
+  function toggleAmbianceSoundscape() {
+    const btn = document.getElementById('soundscapeBtn');
+    const label = document.getElementById('soundscapeLabel');
+
+    if (!isSoundscapePlaying) {
+      isSoundscapePlaying = true;
+      btn.classList.add('playing');
+      label.textContent = 'Hearth Soundscape: Active';
+      showAuraToast('Sensory Soundscape Engaged', 'Embers crackling gently in the hearth room. Immerse your senses.', 'gold');
+
+      // Synthesize soft ambient low rumble & hearth crackle using Web Audio API
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        
+        // Brown noise node for deep warm hearth rumble
+        const bufferSize = audioCtx.sampleRate * 2;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let lastOut = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          output[i] = (lastOut + (0.02 * white)) / 1.02;
+          lastOut = output[i];
+          output[i] *= 3.5;
+        }
+
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 240;
+
+        gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+
+        whiteNoise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        whiteNoise.start(0);
+      } catch (err) {
+        console.log('Web Audio setup:', err);
+      }
+
+    } else {
+      isSoundscapePlaying = false;
+      btn.classList.remove('playing');
+      label.textContent = 'Hearth Soundscape: Paused';
+      if (audioCtx) {
+        audioCtx.close();
+        audioCtx = null;
+      }
+      showAuraToast('Soundscape Paused', 'Return whenever you wish to enter the hearth.', 'gold');
+    }
+  }
+
+  // Quick Add Tasting helper
+  function quickAddTasting(dishName, price) {
+    showAuraToast(
+      'Added to Tasting Journey',
+      `${dishName} ($${price}) has been marked for your personalized culinary progression.`,
+      'gold'
+    );
+  }
+</script>
 {% endblock %}

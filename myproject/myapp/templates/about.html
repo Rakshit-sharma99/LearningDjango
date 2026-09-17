@@ -1,14 +1,789 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
-About page
-{%block css%}
-p {
-    color: green;
-    font-size: 18px;
+{% load static %}
+
+{% block title %}The Atelier Story &amp; Philosophy • AURA{% endblock %}
+
+{% block css %}
+/* ==========================================================================
+   ABOUT & STORYTELLING PAGE SPECIFIC STYLES
+   ========================================================================== */
+.about-hero {
+  padding: clamp(3.5rem, 6vw, 6.5rem) 0 clamp(3rem, 5vw, 5rem);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.about-hero-inner {
+  max-width: 960px;
+}
+
+.about-manifesto-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: #FFF;
+  margin-bottom: 2rem;
+}
+.about-manifesto-title .gold-italic {
+  font-style: italic;
+  color: var(--accent-gold);
+}
+
+.about-lead-text {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+/* Interactive Timeline / Story Stepper */
+.milestones-section {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%);
+}
+
+.timeline-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin: 3.5rem 0 4rem;
+  max-width: 800px;
+}
+.timeline-nav::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border-subtle);
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.timeline-step-btn {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-primary);
+  padding: 0 0.75rem;
+  cursor: pointer;
+}
+.timeline-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-subtle);
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timeline-step-btn.active .timeline-dot {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold);
+  box-shadow: 0 0 16px var(--accent-gold-glow);
+}
+.timeline-year {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+.timeline-step-btn.active .timeline-year {
+  color: var(--accent-gold-light);
+  font-weight: 700;
+}
+
+/* Active Timeline Showcase Card */
+.timeline-showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-xl);
+  padding: clamp(2rem, 4vw, 3.5rem);
+  box-shadow: var(--shadow-elevated);
+}
+@media (min-width: 960px) {
+  .timeline-showcase-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+  }
+}
+
+.timeline-media-frame {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  aspect-ratio: 16 / 11;
+}
+.timeline-media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.4s ease;
+}
+
+.timeline-chapter-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.timeline-chapter-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  color: #FFF;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.timeline-chapter-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+}
+
+.timeline-chapter-quote {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--accent-gold-light);
+  border-left: 2px solid var(--accent-gold);
+  padding-left: 1.25rem;
+}
+
+/* The Four Inviolable Principles */
+.principles-section {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.principles-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 3.5rem;
+}
+@media (min-width: 640px) {
+  .principles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .principles-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.principle-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-base);
+  position: relative;
+}
+.principle-card:hover {
+  border-color: var(--border-gold);
+  transform: translateY(-6px);
+  background: var(--bg-card-hover);
+}
+
+.principle-num {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-gold);
+  margin-bottom: 1.5rem;
+}
+
+.principle-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: #FFF;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+}
+
+.principle-text {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* The Team & Masters Section */
+.team-section {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 3.5rem;
+}
+@media (min-width: 640px) {
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .team-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.team-member-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-base);
+}
+.team-member-card:hover {
+  border-color: var(--border-gold);
+  transform: translateY(-6px);
+}
+
+.member-media {
+  position: relative;
+  aspect-ratio: 4 / 4.8;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+.member-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--transition-smooth);
+}
+.team-member-card:hover .member-media img {
+  transform: scale(1.06);
+}
+
+.member-info {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.member-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: #FFF;
+}
+
+.member-role {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.member-philosophy {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-top: 0.5rem;
+}
+
+.member-ingredient-pill {
+  margin-top: 1rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent-gold-light);
+}
+
+/* Architecture & Space Mosaic */
+.space-mosaic-section {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+}
+
+.space-mosaic-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+}
+@media (min-width: 768px) {
+  .space-mosaic-grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .mosaic-item-1 { grid-column: span 7; }
+  .mosaic-item-2 { grid-column: span 5; }
+  .mosaic-item-3 { grid-column: span 5; }
+  .mosaic-item-4 { grid-column: span 7; }
+}
+
+.space-card {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  aspect-ratio: 16 / 10;
+  background: var(--bg-secondary);
+}
+.space-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s var(--transition-smooth);
+}
+.space-card:hover img {
+  transform: scale(1.05);
+}
+
+.space-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(11, 12, 14, 0.88) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+.space-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.space-name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: #FFF;
+  margin-top: 0.25rem;
 }
 {% endblock %}
 
 {% block content %}
-    <p>Welcome to the About page!</p>
+<!-- ==========================================================================
+     STATEMENT-DRIVEN HERO MANIFESTO
+     ========================================================================== -->
+<section class="about-hero">
+  <div class="container">
+    <div class="about-hero-inner reveal-on-scroll">
+      <div class="eyebrow">THE ATELIER MANIFESTO</div>
+      
+      <h1 class="about-manifesto-title">
+        We do not simply cook.<br>
+        We choreograph the quiet memory of <span class="gold-italic">soil, fire, &amp; season.</span>
+      </h1>
 
+      <p class="about-lead-text">
+        Founded in 2018 along the untamed ridges of the Northern Valley, AURA emerged from a deep conviction: fine dining had grown detached from the living earth. We dismantled the white tablecloths, silenced the sterile formulas, and ignited a white birch hearth.
+      </p>
+
+      <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+        <button type="button" class="btn btn-gold btn-lg" onclick="openReservationModal()">
+          <span>Reserve Your Seat at the Hearth</span>
+        </button>
+        <a href="{% url 'food' %}" class="btn btn-outline-gold btn-lg">
+          <span>Explore Tasting Flights</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     INTERACTIVE CHAPTER MILESTONES (TIMELINE)
+     ========================================================================== -->
+<section class="milestones-section" id="milestones">
+  <div class="container">
+    
+    <div style="text-align: center; max-width: 680px; margin: 0 auto;" class="reveal-on-scroll">
+      <div class="eyebrow" style="justify-content: center;">THE CHRONICLES</div>
+      <h2 class="section-title">An Odyssey of Soil &amp; Flame</h2>
+      <p class="section-subtitle" style="margin: 0 auto;">
+        Click through each milestone to witness the transformation of a wilderness foraging camp into a three-star gastronomic sanctuary.
+      </p>
+    </div>
+
+    <!-- Timeline Stepper Bar -->
+    <div class="timeline-nav" style="margin-left: auto; margin-right: auto;">
+      <div class="timeline-step-btn active" onclick="activateChapter(0)">
+        <div class="timeline-dot"></div>
+        <span class="timeline-year">2018</span>
+      </div>
+      <div class="timeline-step-btn" onclick="activateChapter(1)">
+        <div class="timeline-dot"></div>
+        <span class="timeline-year">2021</span>
+      </div>
+      <div class="timeline-step-btn" onclick="activateChapter(2)">
+        <div class="timeline-dot"></div>
+        <span class="timeline-year">2024</span>
+      </div>
+      <div class="timeline-step-btn" onclick="activateChapter(3)">
+        <div class="timeline-dot"></div>
+        <span class="timeline-year">2026</span>
+      </div>
+    </div>
+
+    <!-- Active Chapter Dynamic Showcase Frame -->
+    <div class="timeline-showcase-grid" id="timelineShowcase">
+      
+      <div class="timeline-media-frame">
+        <img 
+          id="chapterImg"
+          src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1000&q=80" 
+          alt="Milestone Chapter Photography"
+          loading="lazy"
+        >
+      </div>
+
+      <div class="timeline-details">
+        <span class="timeline-chapter-badge" id="chapterBadge">CHAPTER I &bull; FOUNDATION</span>
+        <h3 class="timeline-chapter-title" id="chapterTitle">The Wild Highland Forage</h3>
+        <p class="timeline-chapter-body" id="chapterBody">
+          Chef Julian Vance and botanical researcher Hélène Mercier spent eight months living in the alpine ridges, cataloging 140 indigenous fungal networks, wild herbs, and mountain birch saps. The first menus were penned entirely by firelight.
+        </p>
+        <div class="timeline-chapter-quote" id="chapterQuote">
+          “Before we struck our first match in the kitchen, we promised the mountain we would never take more than the forest was willing to give.”
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================================
+     THE FOUR INVIOLABLE PRINCIPLES
+     ========================================================================== -->
+<section class="principles-section" id="terroir">
+  <div class="container">
+    
+    <div class="reveal-on-scroll">
+      <div class="eyebrow">OUR COVENANT</div>
+      <h2 class="section-title">Four Principles We Never Break</h2>
+      <p class="section-subtitle">
+        In an era of artificial speed and simulated flavors, these four non-negotiable convictions anchor every breath taken inside our atelier.
+      </p>
+    </div>
+
+    <div class="principles-grid">
+      
+      <div class="principle-card reveal-on-scroll stagger-1">
+        <span class="principle-num">PRINCIPIUM 01</span>
+        <h3 class="principle-title">Hyper-Local Terroir</h3>
+        <p class="principle-text">
+          Zero food miles where possible. Over 98% of our botanicals, heirloom grains, and river catches originate within 60 miles of our front hearth.
+        </p>
+      </div>
+
+      <div class="principle-card reveal-on-scroll stagger-2">
+        <span class="principle-num">PRINCIPIUM 02</span>
+        <h3 class="principle-title">Living Birch Embers</h3>
+        <p class="principle-text">
+          We reject magnetic induction. Our cooking relies on white-hot white birch and seasoned oak coals, honoring the primal cadence of fire and ember.
+        </p>
+      </div>
+
+      <div class="principle-card reveal-on-scroll stagger-3">
+        <span class="principle-num">PRINCIPIUM 03</span>
+        <h3 class="principle-title">Producer Reverence</h3>
+        <p class="principle-text">
+          We deal directly with 24 multi-generational agrarian families and free divers, paying 40% above fair-market rates to protect regenerative farming.
+        </p>
+      </div>
+
+      <div class="principle-card reveal-on-scroll stagger-4">
+        <span class="principle-num">PRINCIPIUM 04</span>
+        <h3 class="principle-title">The Circular Hearth</h3>
+        <p class="principle-text">
+          Zero waste in practice. Spent vegetable tops become wild vinegars, animal bones ferment into rich garums, and clean wood ash clarifies our broths.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================================
+     THE MASTERS & ARTISANS
+     ========================================================================== -->
+<section class="team-section" id="masters">
+  <div class="container">
+    
+    <div style="display: flex; flex-direction: column; gap: 1rem;" class="reveal-on-scroll">
+      <div class="eyebrow">THE CULINARY COUNCIL</div>
+      <h2 class="section-title">Masters Behind the Hearth</h2>
+      <p class="section-subtitle">
+        Meet the four culinary architects orchestrating the sights, scents, sips, and harmonies of AURA.
+      </p>
+    </div>
+
+    <div class="team-grid">
+      
+      <!-- Member 1 -->
+      <article class="team-member-card reveal-on-scroll stagger-1">
+        <div class="member-media">
+          <img 
+            src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=800&q=80" 
+            alt="Chef Julian Vance" 
+            loading="lazy"
+          >
+        </div>
+        <div class="member-info">
+          <h3 class="member-name">Julian Vance</h3>
+          <span class="member-role">Chef Patron &amp; Founder</span>
+          <p class="member-philosophy">
+            Former apprentice in Kyoto and San Sebastián. Obsessed with high-temperature thermal transfer and wild mountain fungi.
+          </p>
+          <div class="member-ingredient-pill">★ Focus: Black Morel &amp; Oak Charcoal</div>
+        </div>
+      </article>
+
+      <!-- Member 2 -->
+      <article class="team-member-card reveal-on-scroll stagger-2">
+        <div class="member-media">
+          <img 
+            src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=800&q=80" 
+            alt="Dr. Hélène Mercier" 
+            loading="lazy"
+          >
+        </div>
+        <div class="member-info">
+          <h3 class="member-name">Dr. Hélène Mercier</h3>
+          <span class="member-role">Head of Microbial Fermentation</span>
+          <p class="member-philosophy">
+            Biochemist turned culinarian. Cultivates our subterranean vault of 40 living koji strains, barley garums, and aged elder vinegars.
+          </p>
+          <div class="member-ingredient-pill">★ Focus: 3-Year Barley Koji Garum</div>
+        </div>
+      </article>
+
+      <!-- Member 3 -->
+      <article class="team-member-card reveal-on-scroll stagger-3">
+        <div class="member-media">
+          <img 
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" 
+            alt="Camilla Lindqvist" 
+            loading="lazy"
+          >
+        </div>
+        <div class="member-info">
+          <h3 class="member-name">Camilla Lindqvist</h3>
+          <span class="member-role">Master Pastry Architect</span>
+          <p class="member-philosophy">
+            Replaces refined sugars with concentrated birch saps, smoked honeycombs, and cold-pressed pine resins.
+          </p>
+          <div class="member-ingredient-pill">★ Focus: Smoked Mountain Honey</div>
+        </div>
+      </article>
+
+      <!-- Member 4 -->
+      <article class="team-member-card reveal-on-scroll stagger-4">
+        <div class="member-media">
+          <img 
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80" 
+            alt="Mateo Rossi" 
+            loading="lazy"
+          >
+        </div>
+        <div class="member-info">
+          <h3 class="member-name">Mateo Rossi</h3>
+          <span class="member-role">Master Sommelier &amp; Cellar Curator</span>
+          <p class="member-philosophy">
+            Curates our 450-bottle cellar exclusively from low-intervention, biodynamic growers practicing ancestral amphora aging.
+          </p>
+          <div class="member-ingredient-pill">★ Focus: Jura Savagnin Sous Voile</div>
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================================
+     ATMOSPHERE & SPACE MOSAIC
+     ========================================================================== -->
+<section class="space-mosaic-section">
+  <div class="container">
+    
+    <div style="text-align: center; max-width: 650px; margin: 0 auto;" class="reveal-on-scroll">
+      <div class="eyebrow" style="justify-content: center;">ARCHITECTURAL HARMONY</div>
+      <h2 class="section-title">The Sanctuary of Senses</h2>
+      <p class="section-subtitle" style="margin: 0 auto;">
+        Constructed from volcanic basalt stone, charred Japanese cedar, and acoustically tuned cedar panels to foster deep presence.
+      </p>
+    </div>
+
+    <div class="space-mosaic-grid">
+      
+      <div class="space-card mosaic-item-1 reveal-on-scroll stagger-1">
+        <img 
+          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80" 
+          alt="The Main Hearth Sanctuary Dining Room"
+          loading="lazy"
+        >
+        <div class="space-card-overlay">
+          <span class="space-label">SANCTUARY ROOM</span>
+          <h3 class="space-name">The Main Hearth Dining Hall</h3>
+        </div>
+      </div>
+
+      <div class="space-card mosaic-item-2 reveal-on-scroll stagger-2">
+        <img 
+          src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80" 
+          alt="Chef Julian's Counter Front Row"
+          loading="lazy"
+        >
+        <div class="space-card-overlay">
+          <span class="space-label">12 SEATS ONLY</span>
+          <h3 class="space-name">The Open Ember Kitchen Counter</h3>
+        </div>
+      </div>
+
+      <div class="space-card mosaic-item-3 reveal-on-scroll stagger-3">
+        <img 
+          src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1200&q=80" 
+          alt="The Subterranean Wine Vault"
+          loading="lazy"
+        >
+        <div class="space-card-overlay">
+          <span class="space-label">SUBTERRANEAN</span>
+          <h3 class="space-name">The Private Biodynamic Vault</h3>
+        </div>
+      </div>
+
+      <div class="space-card mosaic-item-4 reveal-on-scroll stagger-4">
+        <img 
+          src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80" 
+          alt="The Botanical Solarium"
+          loading="lazy"
+        >
+        <div class="space-card-overlay">
+          <span class="space-label">GREENHOUSE</span>
+          <h3 class="space-name">The Rooftop Botanical Solarium</h3>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================================
+     CLOSING GRAND INVITATION CTA
+     ========================================================================== -->
+<section style="padding: clamp(3rem, 6vw, 6rem) 0 clamp(4rem, 8vw, 7rem); text-align: center;">
+  <div class="container">
+    <div style="max-width: 780px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: var(--radius-xl); padding: clamp(2.5rem, 6vw, 4.5rem); box-shadow: var(--shadow-gold);" class="reveal-on-scroll">
+      <div class="eyebrow" style="justify-content: center;">THE THRESHOLD AWAITS</div>
+      <h2 class="section-title" style="font-size: clamp(2rem, 3.5vw, 3rem);">Take Your Seat at the Living Hearth</h2>
+      <p class="section-subtitle" style="margin: 0 auto 2.5rem;">
+        An evening at AURA is a collective act of sensory devotion. We invite you to experience the harmony between nature’s wild harvest and culinary alchemy.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap;">
+        <button type="button" class="btn btn-gold btn-lg" onclick="openReservationModal()">
+          <span>Reserve Your Table Now</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+        <a href="tel:+18005552872" class="btn btn-outline-gold btn-lg">
+          <span>Private Event Inquiry</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // ==========================================
+  // INTERACTIVE CHAPTER MILESTONES DATA & SWITCHER
+  // ==========================================
+  const chapterData = [
+    {
+      badge: "CHAPTER I • FOUNDATION (2018)",
+      title: "The Wild Highland Forage",
+      body: "Chef Julian Vance and botanical researcher Hélène Mercier spent eight months living along the northern ridges, cataloging 140 indigenous fungal networks, wild herbs, and mountain birch saps. The first menus were penned entirely by firelight.",
+      quote: "“Before we struck our first match in the kitchen, we promised the mountain we would never take more than the forest was willing to give.”",
+      img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      badge: "CHAPTER II • THE FIRST FLAME (2021)",
+      title: "The Experimental Test Hearth",
+      body: "Opening in a decommissioned stone granary with just 18 seats, AURA cast aside commercial convection ovens for a hand-crafted white birch hearth. Every night was an electric trial of heat, wood smoke, and raw intuition.",
+      quote: "“Electric ovens produce heat; woodfire produces spirit. The flames taught us humility every single service.”",
+      img: "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      badge: "CHAPTER III • MICHELIN STARS (2024)",
+      title: "Global Acclaim & Terroir Manifesto",
+      body: "The Michelin Guide awarded AURA Two Stars within six months of inspection, praising the restaurant’s pioneering zero-waste fermentation program and radical hyper-local ingredient sourcing.",
+      quote: "“Recognition did not change our compass. It gave us the courage to push our forage deeper into the wild.”",
+      img: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      badge: "CHAPTER IV • THREE STARS & THE FUTURE (2026)",
+      title: "The Botanical Atelier & Vault",
+      body: "Today, AURA holds the coveted Three Michelin Stars. Operating from our purpose-built glass and basalt sanctuary, we house an underground koji fermentation lab, a biodynamic cellar, and a rooftop botanical solarium.",
+      quote: "“Haute cuisine is not about preciousness. It is about waking up to the poetry of the ground beneath your feet.”",
+      img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=80"
+    }
+  ];
+
+  function activateChapter(index) {
+    const stepBtns = document.querySelectorAll('.timeline-step-btn');
+    stepBtns.forEach((btn, i) => {
+      btn.classList.toggle('active', i === index);
+    });
+
+    const data = chapterData[index];
+    const badge = document.getElementById('chapterBadge');
+    const title = document.getElementById('chapterTitle');
+    const body = document.getElementById('chapterBody');
+    const quote = document.getElementById('chapterQuote');
+    const img = document.getElementById('chapterImg');
+
+    if (badge && title && body && quote && img) {
+      img.style.opacity = '0.3';
+      setTimeout(() => {
+        badge.textContent = data.badge;
+        title.textContent = data.title;
+        body.textContent = data.body;
+        quote.textContent = data.quote;
+        img.src = data.img;
+        img.style.opacity = '1';
+      }, 200);
+    }
+  }
+</script>
 {% endblock %}
