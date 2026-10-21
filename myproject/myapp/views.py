@@ -445,3 +445,35 @@ def htmlform(request):
             return HttpResponse("<h2>Error: Please fill in all fields.</h2>")
     else:
         return render(request, 'htmlforms.html')
+    
+
+
+def validate(request):
+    submitted_details=None
+    if request.method=='POST':
+        name=request.POST.get('name')
+        email=request.POST.get('email')
+        password=request.POST.get('password')
+
+        name_error=None
+        email_error=None
+        password_error=None
+
+        if not name:
+                name_error="Name is required"
+        if not email:
+                email_error="Email is required"
+        if len(password)<6:
+                password_error="Password should be at least 6 characters long"
+
+        if name_error or email_error or password_error:
+            return render(request, 'valiidate.html', {
+                'name':name,
+                'email':email,
+                'password':password,
+                'name_error':name_error,
+                'email_error':email_error,
+                'password_error':password_error
+            })
+        submitted_details={'name':name, 'email':email, 'password':password}
+    return render(request, 'valiidate.html', {'submitted_details':submitted_details})
