@@ -254,3 +254,180 @@ def menu(request, category, subcat=""):
 
 def csstest(request):
     return render(request, 'testcss.html')
+
+
+def plan(request,plan=None):
+    plans=[
+        {'name': 'plan1'},
+        {'name': 'plan2'},
+        {'name': 'plan3'}
+    ]
+    return render(request, 'plans.html', {'plans': plans})
+
+def plan_details(request, plan_name):
+    return HttpResponse(f"<h2>Plan Details for: {plan_name}</h2>")
+
+
+
+def phones(request,):
+    phones =[
+        {'name':'samsung'},
+        {'name':'apple'}
+    ]
+
+    return render(request,'phone.html', {'phones':phones})
+
+def umar(request    ):
+    umars =[
+        {'age': 20},
+        {'age': 25}
+    ]
+    return render(request, 'umar.html', {'umars': umars})
+
+def home (request):
+    return render(request, 'home/home.html')
+
+def base (request):
+    return render(request, 'home/base.html')
+
+def about (request):
+    return render(request, 'home/about.html')
+
+# def greet(request,name):
+#     return HttpResponse(f"Hello {name} good morning")
+
+
+def dishes(request, food):
+    items ={
+        'pizza':'Pizza is 150',
+        'burger':'burger is 150',
+        'chowmin':'chowmin is 150',
+    }
+    return  HttpResponse(f"<h2>{food}</h2>")
+
+
+def calc(request):
+    val1 = request.GET.get('val1')
+    val2 = request.GET.get('val2')
+    val3 = request.GET.get('oper')
+    if val3 =="add":
+        result = int(val1)+int (val2)
+    return HttpResponse(f"{result}")
+
+def greet(request, name ,time):
+ 
+    return render(request, 'home/greeting.html',{
+        'name':name,
+        'time':time
+    })
+
+
+def departments(request):
+    depart= [
+       { 'name':'cse'},
+       { 'name':'bsc'},
+       { 'name':'mca'},
+       { 'name':'agriculture'},
+       { 'name':'law'}
+    ]
+    return render(request,'college.html', {'depart': depart})
+
+def department_details(request, department_name):
+   
+    depart = [
+        'cse',
+        'bsc',
+        'mca',
+        'agriculture',
+        'law'
+    ]
+    if department_name in depart:
+       message = f"you selected: {department_name}"
+    else: 
+        message =f"Department not available"
+
+    return render(request, 'dep_dtl.html', {'message':message}) 
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def student_result(request):
+    details=[
+
+      {  'name':'rakshit','course':'django', 'rno':1,'m1':67,'m2':78,'m3':89},
+ {       'name':'aman','course':'django', 'rno':2,'m1':67,'m2':78,'m3':89},
+        {'name':'akash','course':'django', 'rno':3,'m1':67,'m2':78,'m3':89}
+    
+    ]
+    return render(request, 'stdname.html',{'details':details})
+
+
+
+
+
+
+def stdeatils(request, rno):
+
+    details = [
+        {'name':'rakshit','course':'django','rno':1,'m1':67,'m2':78,'m3':89},
+        {'name':'aman','course':'django','rno':2,'m1':10,'m2':11,'m3':12},
+        {'name':'akash','course':'django','rno':3,'m1':67,'m2':78,'m3':89}
+    ]
+
+    for std in details:
+
+        if rno == std['rno']:
+
+            m1 = std['m1']
+            m2 = std['m2']
+            m3 = std['m3']
+
+            total = int(m1) + int(m2) + int(m3)
+            average = total / 3
+
+            content = f"{std['name']}, {std['course']}, {std['rno']}, {m1}, {m2}, {m3}"
+
+            return render(request, 'stdetails.html', {'content': content,'average': average })
+        content = "student not found"
+
+    return render(request, 'stdetails.html', {'content': content})
+
+
+
+
+
+
+
+
+def student(request): 
+ 
+    details = [
+        {'name1':'raj','course':'django'},
+        {'name2':'rohit','course':'django'},
+        {'name3':'birju','course':'java'}
+    ]
+ 
+    course = request.GET.get('course') 
+ 
+    if course=="django":
+        return HttpResponse(f"{{name1}}")
+    elif course=="django":
+        return HttpResponse(f"{{name2}}")
+    elif course=="java":
+        return HttpResponse(f"{{name3}}")
+    else:
+        return HttpResponse(f"{{name1}},{{name2}},{{name3}}")
+

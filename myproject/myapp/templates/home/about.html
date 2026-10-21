@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'home/base.html' %}
+    {%block content%}
+        <h1>Welcome to the about us page</h1>
+        {% load static %}
+        <img src="{% static 'img1.png'%}" alt="" style ='height: 100px ; width: 80px'>
+        <p>This is me Rakshit Sharma </p>
+    {% endblock %}
+</body>
+</html>

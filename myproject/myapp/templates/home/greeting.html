@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+      
+  {% if time == "morning" %}
+       <h1>
+
+           "Good morning, {{name}}
+       </h1>
+   {% elif time == "afternoon" %}
+   <h1>
+
+       Good Afternoon, {{name}}
+   </h1>
+  {% elif time == "evening" %}
+   <h1>
+
+       Good evening, {{name}}
+   </h1>
+  {% else %}
+   <h1>
+
+       Invalid time 
+   </h1>      
+   {% endif %}
+</body>
+</html>
