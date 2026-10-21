@@ -55,4 +55,7 @@ urlpatterns = [
     path('students/',views.student_result),
     path('stdetails/<int:rno>/',views.stdeatils),
     path('student/', views.student),
+path('htmlform/', views.htmlform, name='htmlform'),
 ]
+
+

@@ -431,3 +431,17 @@ def student(request):
     else:
         return HttpResponse(f"{{name1}},{{name2}},{{name3}}")
 
+
+
+
+def htmlform(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')                       
+        password = request.POST.get('password')
+        if name and email and password:
+         return HttpResponse(f"<h2>Name:  {name}</h2><h2>Email: {email}</h2><h2>Pass: {password}</h2>")
+        else:
+            return HttpResponse("<h2>Error: Please fill in all fields.</h2>")
+    else:
+        return render(request, 'htmlforms.html')
