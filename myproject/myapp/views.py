@@ -477,3 +477,19 @@ def validate(request):
             })
         submitted_details={'name':name, 'email':email, 'password':password}
     return render(request, 'valiidate.html', {'submitted_details':submitted_details})
+
+
+
+
+from .forms import InputForm1
+def form_submission(request):
+    if request.method == 'POST':
+        form = InputForm1(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            return HttpResponse(f"<h2>Name: {name}</h2><h2>Email: {email}</h2><h2>Password: {password}</h2>")
+    else:
+        form = InputForm1()
+    return render(request, 'form_submission.html', {'form': form})
