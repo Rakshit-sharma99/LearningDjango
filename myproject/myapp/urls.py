@@ -1,7 +1,9 @@
+from django.contrib import admin
 from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     # Template route
 #     path('mytemplate/', views.mytemplate, name='mytemplate'),
 #     # re_path(r'^fooddata/(?P<fooddata>[\w -]+)/?:(?P<item_name>[\w -]*)/)?$', views.fooddata, name='fooddata'),
