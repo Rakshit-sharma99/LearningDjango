@@ -482,14 +482,16 @@ def validate(request):
 
 
 from .forms import InputForm1
-def form_submission(request):
+def inputform1(request):
     if request.method == 'POST':
         form = InputForm1(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            return HttpResponse(f"<h2>Name: {name}</h2><h2>Email: {email}</h2><h2>Password: {password}</h2>")
+            
+            return HttpResponse("Form submitted successfully")
     else:
         form = InputForm1()
-    return render(request, 'form_submission.html', {'form': form})
+    return render(request, 'InputForm1.html', {'form': form})
+
+form_submission = inputform1
+
+

@@ -55,9 +55,12 @@ urlpatterns = [
     path('students/',views.student_result),
     path('stdetails/<int:rno>/',views.stdeatils),
     path('student/', views.student),
-path('htmlform/', views.htmlform, name='htmlform'),
+    path('htmlform/', views.htmlform, name='htmlform'),
 
-path('validate/', views.validate, name='validate')
-]
+    path('validate/', views.validate, name='validate'),
+    path('inputform1/', views.form_submission, name='inputform1'),
+    path('inputform2/', views.form_submission, name='inputform1'),
+        ]
+    
 
 
