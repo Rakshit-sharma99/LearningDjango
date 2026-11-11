@@ -62,7 +62,14 @@ urlpatterns = [
     path('validate/', views.validate, name='validate'),
     path('inputform1/', views.form_submission, name='inputform1'),
     path('inputform2/', views.form_submission, name='inputform1'),
-        ]
-    
+    path('insertblogpost/', views.insertblogpost, name='insertblogpost'),
+
+    # Cookie routes
+    path('cookie/', views.cookie_home, name='cookie_home'),
+    path('cookie/set/', views.set_cookie, name='set_cookie'),
+    path('cookie/get/', views.get_cookie, name='get_cookie'),
+    path('cookie/delete/', views.delete_cookie, name='delete_cookie'),
+
+]
 
 

@@ -14,3 +14,5 @@ urlpatterns = [
 # Custom Error Handlers
 handler404 = 'myapp.views.custom_404'
 handler500 = 'myapp.views.custom_500'
+
+

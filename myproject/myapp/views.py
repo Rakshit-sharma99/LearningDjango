@@ -495,3 +495,60 @@ def inputform1(request):
 form_submission = inputform1
 
 
+from .forms import BlogpostForm
+def insertblogpost(request):
+    blog_created = False
+    if request.method == 'POST':
+        form = BlogpostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            blog_created = True
+    else:
+        form = BlogpostForm()
+    return render(request, 'insertblogpost.html', {'form': form, 'blog_created': blog_created}) 
+
+from .models import Blogpost
+def blogposts(request):
+    posts = Blogpost.objects.all()
+    return render(request, 'blogpost.html', {'posts': posts})
+
+
+# ==========================================
+# Cookie Views (set / get / delete)
+# ==========================================
+
+def cookie_home(request):
+    return HttpResponse(
+        "<h2>Cookie Demo</h2>"
+        "<ul>"
+        "<li><a href='/cookie/set/?name=user&value=Rakshit'>Set cookie</a></li>"
+        "<li><a href='/cookie/get/?name=user'>Get cookie</a></li>"
+        "<li><a href='/cookie/delete/?name=user'>Delete cookie</a></li>"
+        "</ul>"
+    )
+
+
+def set_cookie(request):
+    name = request.GET.get('name', 'user')
+    value = request.GET.get('value', 'guest')
+    response = HttpResponse(f"<h2>Cookie set: {name} = {value}</h2><a href='/cookie/'>Back</a>")
+    response.set_cookie(name, value, max_age=60 * 60)  # expires in 1 hour
+    return response
+
+
+def get_cookie(request):
+    name = request.GET.get('name', 'user')
+    value = request.COOKIES.get(name)
+    if value is None:
+        return HttpResponse(f"<h2>Cookie '{name}' not found</h2><a href='/cookie/'>Back</a>")
+    return HttpResponse(f"<h2>Cookie: {name} = {value}</h2><a href='/cookie/'>Back</a>")
+
+
+def delete_cookie(request):
+    name = request.GET.get('name', 'user')
+    response = HttpResponse(f"<h2>Cookie '{name}' deleted</h2><a href='/cookie/'>Back</a>")
+    response.delete_cookie(name)
+    return response
+
+
+

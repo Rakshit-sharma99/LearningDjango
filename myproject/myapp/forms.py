@@ -1,5 +1,5 @@
 from django import forms
-from .models import Emp
+from .models import Emp, Blogpost
 
 class InputForm1(forms.Form):
     name = forms.CharField()
@@ -21,4 +21,10 @@ class InputForm2(forms.Form):
 class EmpForm(forms.ModelForm):
     class Meta:
         model = Emp
-        fields = '__all__'
+        fields = '__all__'
+
+
+class BlogpostForm(forms.ModelForm):
+    class Meta:
+        model = Blogpost
+        fields = "__all__"

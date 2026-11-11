@@ -22,3 +22,11 @@ class Book(models.Model):
     published_date=models.DateField()
     def __str__(self):
         return self.title
+    
+
+class Blogpost(models.Model):
+    title=models.CharField(max_length=50)
+    post=models.CharField(max_length=400)
+    thumbnail=models.ImageField(upload_to='images/',null=True,blank=True)
+    def __str__(self):
+        return self.title
