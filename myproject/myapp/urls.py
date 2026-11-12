@@ -64,12 +64,22 @@ urlpatterns = [
     path('inputform2/', views.form_submission, name='inputform1'),
     path('insertblogpost/', views.insertblogpost, name='insertblogpost'),
 
+    # Session routes
+    path('session/set/', views.set_session, name='set_session'),
+    path('session/get/', views.get_session, name='get_session'),
+    path('session/delete/', views.delete_session, name='delete_session'),
+
     # Cookie routes
     path('cookie/', views.cookie_home, name='cookie_home'),
     path('cookie/set/', views.set_cookie, name='set_cookie'),
     path('cookie/get/', views.get_cookie, name='get_cookie'),
     path('cookie/delete/', views.delete_cookie, name='delete_cookie'),
-
+    path('cookieview1/', views.cookieview1, name='cookieview1'),
+    path('cookieview2/', views.cookieview2, name='cookieview2'),
+    path('cookieview3/', views.cookieview3, name='cookieview3'),
+    path('lastvisitedpage/', views.lastvisitedpage, name='lastvisitedpage'),
+    path('simpleform/', views.simpleform, name='simpleform'),
+    path('/setsession/', views.set_session, name='set_session'),
 ]
 
 

@@ -552,3 +552,80 @@ def delete_cookie(request):
 
 
 
+# ==========================================
+# Session Views (set / get / delete username & email)
+# ==========================================
+
+def set_session(request):
+    username = request.GET.get('username', 'Rakshitt')
+    email = request.GET.get('email', 'Rakshit@example.com')
+    request.session['username'] = username
+    request.session['email'] = email
+    return HttpResponse(
+        f"<h2>Session set: username = {username}, email = {email}</h2>"
+        "<a href='/session/get/'>Get session</a>"
+    )
+
+
+def get_session(request):
+    username = request.session.get('username')
+    email = request.session.get('email')
+    if username is None and email is None:
+        return HttpResponse("<h2>No session data found</h2><a href='/session/set/'>Set session</a>")
+    return HttpResponse(f"<h2>Session: username = {username}, email = {email}</h2>")
+
+
+def delete_session(request):
+    request.session.pop('username', None)
+    request.session.pop('email', None)
+    return HttpResponse("<h2>Session data deleted</h2><a href='/session/get/'>Get session</a>")
+
+
+# Last Page Cookie Views
+
+
+def cookieview1(request):
+    response = HttpResponse("<h2>Set lastpage = page1</h2>")
+    response.set_cookie('lastpage', 'page1')
+    return response
+def cookieview2(request):
+    response = HttpResponse("<h2>Set lastpage = page2</h2>")
+    response.set_cookie('lastpage', 'page2')
+    return response
+def cookieview3(request):
+    response = HttpResponse("<h2>Set lastpage = page3</h2>")
+    response.set_cookie('lastpage', 'page3')
+    return response
+
+
+def lastvisitedpage(request):
+    last_page = request.COOKIES.get('lastpage')
+    if last_page is None:
+        return HttpResponse("<h2>No page visited yet</h2>")
+    # return HttpResponse(f"<h2>Last visited page: {last_page}</h2>")
+    return render(request, 'lvp.html', {'last_page': last_page})
+
+
+
+
+from django.middleware.csrf import get_token
+
+def simpleform(request):
+    csrf_token = get_token(request)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        return HttpResponse(f"<h2>Hello, {name}!</h2>")
+    else : 
+         return HttpResponse(f"""<form method='POST' >
+                    <input type='hidden' name='csrfmiddlewaretoken' value='{csrf_token}'>
+                    <input type='text' name='name' placeholder='Enter your name'>
+                    <input type='submit' value='Submit'>
+                    </form>""")
+    
+
+# def tempform(request):
+#     if request.method == 'POST':
+#         name =request.POST.get('name')
+#         return HttpResponse(f"<h2>Hello, {name}!</h2>")
+#     else:
+        
